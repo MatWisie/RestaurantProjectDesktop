@@ -13,7 +13,7 @@
         <hc:Theme/>
     </UserControl.Resources>
     <Grid>
-        <GroupBox Header="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Height="350">
+        <GroupBox Header="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Height="400">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -21,12 +21,14 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Username" VerticalAlignment="Center"/>
                 <TextBox Grid.Row="1" Width="400" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Text="Password" Grid.Row="2" VerticalAlignment="Center"/>
                 <hc:PasswordBox Width="400" Name="UserPassword" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" ShowEyeButton="True" PasswordBox.PasswordChanged="PasswordBox_PasswordChanged"/>
                 <Button Content="Login" FontSize="30" Height="70" Width="150" Margin="0 10 0 0" Grid.Row="4" Style="{StaticResource ButtonPrimary}" Command="{Binding LoginCommand}"/>
+                <TextBlock Grid.Row="5" Text="{Binding ErrorText}" FontSize="15" Foreground="DarkRed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
         </GroupBox>
     </Grid>

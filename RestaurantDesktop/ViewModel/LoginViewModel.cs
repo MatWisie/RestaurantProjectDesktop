@@ -11,7 +11,9 @@ namespace RestaurantDesktop.ViewModel
         [RelayCommand]
         private void Login()
         {
-            var options = new RestClientOptions("https://restaurantapi20240224142603.azurewebsites.net")
+            if (UserName == string.Empty || Password == string.Empty) { return; }
+
+            var options = new RestClientOptions(Connection.ApiAddress)
             {
                 Authenticator = new HttpBasicAuthenticator("username", "password")
             };
@@ -23,6 +25,10 @@ namespace RestaurantDesktop.ViewModel
                     password = Password
                 });
             var response = client.Execute(request);
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                ErrorText = "Wrong name or password";
+            }
             MessageBox.Show(response.Content);
 
         }
@@ -32,5 +38,8 @@ namespace RestaurantDesktop.ViewModel
 
         [ObservableProperty]
         private string password;
+
+        [ObservableProperty]
+        private string errorText;
     }
 }
