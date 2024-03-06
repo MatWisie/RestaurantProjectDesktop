@@ -1,33 +1,33 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using RestSharp;
-using RestSharp.Authenticators;
+using RestaurantDesktop.Interface;
 using System.Windows;
 
 namespace RestaurantDesktop.ViewModel
 {
     public partial class LoginViewModel : ObservableObject
     {
+        private readonly IAuthService _authService;
+
+        public LoginViewModel(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
         [RelayCommand]
         private void Login()
         {
-            if (UserName == string.Empty || Password == string.Empty) { return; }
-
-            var options = new RestClientOptions(Connection.ApiAddress)
+            string errors = _authService.ValidateLogin(UserName, Password);
+            if (errors != string.Empty)
             {
-                Authenticator = new HttpBasicAuthenticator("username", "password")
-            };
-            var client = new RestClient(options);
-            var request = new RestRequest("/login-worker", Method.Post)
-                .AddJsonBody(new
-                {
-                    username = UserName,
-                    password = Password
-                });
-            var response = client.Execute(request);
+                ErrorText = errors;
+                return;
+            }
+            var response = _authService.LoginWorker(UserName, Password);
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 ErrorText = "Wrong name or password";
+                return;
             }
             MessageBox.Show(response.Content);
 
