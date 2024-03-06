@@ -16,5 +16,14 @@ namespace RestaurantDesktopTests
             Assert.AreEqual(string.Empty, result);
         }
 
+        [TestMethod]
+        public void ValidateLogin_EmptyString_LoginOrPasswordCantBeNullErrorMessage()
+        {
+            var authRepository = new AuthRepository();
+            AuthService authService = new AuthService(authRepository);
+
+            var result = authService.ValidateLogin("", "Ppppp1!");
+            Assert.AreEqual("Login and password can't be null", result);
+        }
     }
 }
