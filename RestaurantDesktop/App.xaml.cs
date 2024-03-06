@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using RestaurantDesktop.Interface;
+using RestaurantDesktop.Repository;
+using RestaurantDesktop.Service;
 using RestaurantDesktop.ViewModel;
 using System.Windows;
 
@@ -19,6 +22,9 @@ namespace RestaurantDesktop
         private static IServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection();
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IAuthService, AuthService>();
+
             services.AddTransient<LoginViewModel>();
             services.AddTransient<MainWindowViewModel>();
 
