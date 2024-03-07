@@ -24,6 +24,8 @@ namespace RestaurantDesktop
             var services = new ServiceCollection();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IConfigurationService, ConfigurationService>();
+            services.AddScoped<IJsonService, JsonService>();
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<MainWindowViewModel>();
