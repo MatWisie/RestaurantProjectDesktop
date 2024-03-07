@@ -20,5 +20,15 @@ namespace RestaurantDesktop.Service
                 return true;
 
             }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public string GetConfiguration(string key)
+        {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            return config.AppSettings.Settings[key].Value;
+        }
     }
 }
