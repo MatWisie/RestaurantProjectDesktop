@@ -28,6 +28,9 @@ namespace RestaurantDesktop.Service
         public string GetConfiguration(string key)
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            if (config.AppSettings.Settings[key] == null)
+                return string.Empty;
+
             return config.AppSettings.Settings[key].Value;
         }
     }
