@@ -1,6 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 using RestaurantDesktop.Interface;
+using RestaurantDesktop.Model.Message;
 
 namespace RestaurantDesktop.ViewModel
 {
@@ -35,10 +38,14 @@ namespace RestaurantDesktop.ViewModel
 
             if (response.Content != null)
             {
-                string token = _jsonService.ExtractFromJson(response.Content, "token");
-                string userId = _jsonService.ExtractFromJson(response.Content, "userId");
+                string token = (string)_jsonService.ExtractFromJson(response.Content, "token");
+                string userId = (string)_jsonService.ExtractFromJson(response.Content, "userId");
+                string userRole = (string)_jsonService.ExtractFromJson(response.Content, "userRoles");
                 _configurationService.AddConfiguration("UserToken", token);
                 _configurationService.AddConfiguration("UserId", userId);
+                _configurationService.AddConfiguration("UserRole", userRole);
+
+                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<MainMenuViewModel>()));
             }
         }
 
