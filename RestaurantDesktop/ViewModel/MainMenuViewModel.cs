@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using RestaurantDesktop.Interface;
+using RestaurantDesktop.Model.Message;
 
 namespace RestaurantDesktop.ViewModel
 {
@@ -14,7 +16,7 @@ namespace RestaurantDesktop.ViewModel
             string userRole = _configurationService.GetConfiguration("UserRole");
             if (userRole == string.Empty)
             {
-                WeakReferenceMessenger.Default.Send(App.Current.Services.GetService<LoginViewModel>());
+                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<UserAdminViewModel>()));
             }
 
             if (userRole == "Admin")
@@ -25,5 +27,12 @@ namespace RestaurantDesktop.ViewModel
 
         [ObservableProperty]
         private string usersTileTitle;
+
+        [RelayCommand]
+        private void GoToUserSettings()
+        {
+            if (_configurationService.GetConfiguration("UserRole") == "Admin")
+                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<UserAdminViewModel>()));
+        }
     }
 }
