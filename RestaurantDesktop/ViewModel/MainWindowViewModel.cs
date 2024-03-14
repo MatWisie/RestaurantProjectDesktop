@@ -1,16 +1,22 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using RestaurantDesktop.Interface;
 using RestaurantDesktop.Model.Message;
 
 namespace RestaurantDesktop.ViewModel
 {
     public partial class MainWindowViewModel : ObservableObject
     {
-        public MainWindowViewModel()
+        private readonly IConfigurationService _configurationService;
+        public MainWindowViewModel(IConfigurationService configurationService)
         {
+            _configurationService = configurationService;
             WeakReferenceMessenger.Default.Register<ChangeMainViewMessage>(this, (r, m) => ChangeMainViewModel(m.ViewModel));
-            MainViewModel = App.Current.Services.GetService<LoginViewModel>();
+            if (string.IsNullOrEmpty(_configurationService.GetConfiguration("UserToken")))
+                MainViewModel = App.Current.Services.GetService<LoginViewModel>();
+            else
+                MainViewModel = App.Current.Services.GetService<MainMenuViewModel>();
         }
         [ObservableProperty]
         private ObservableObject mainViewModel;
