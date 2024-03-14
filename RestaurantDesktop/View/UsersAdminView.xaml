@@ -6,6 +6,8 @@
              xmlns:mahIcons="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:local="clr-namespace:RestaurantDesktop.View"
+             xmlns:vm="clr-namespace:RestaurantDesktop.ViewModel"
+             d:DataContext="{d:DesignInstance Type=vm:UserAdminViewModel, IsDesignTimeCreatable=True}"
              d:Background="White"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -14,7 +16,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <ListView>
+        <ListView ItemsSource="{Binding LoadedUsers}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -39,7 +41,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Border Grid.Column="1" Background="LightBlue" BorderBrush="Blue">
+        <Border Grid.Column="1" Background="#4887b5" BorderBrush="Blue">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
