@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestaurantDesktop.Interface;
+using RestaurantDesktop.Model;
 
 namespace RestaurantDesktop.Service
 {
@@ -42,6 +43,36 @@ namespace RestaurantDesktop.Service
             {
                 return token.ToString();
             }
+        }
+        public List<User> ExtractUsersFromJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                throw new ArgumentNullException("JSON string cannot be null or empty");
+            }
+
+            JArray jsonArray = JArray.Parse(json);
+
+            if (jsonArray == null)
+            {
+                throw new Exception("Failed to parse JSON");
+            }
+
+            List<User> users = new List<User>();
+
+            foreach (JObject userObj in jsonArray)
+            {
+                User user = new User
+                {
+                    Id = userObj["id"].ToString(),
+                    UserName = userObj["userName"].ToString(),
+                    Role = userObj["role"].ToString()
+                };
+
+                users.Add(user);
+            }
+
+            return users;
         }
     }
 }
