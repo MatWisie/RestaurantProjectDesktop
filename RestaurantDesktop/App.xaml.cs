@@ -26,10 +26,13 @@ namespace RestaurantDesktop
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IConfigurationService, ConfigurationService>();
             services.AddScoped<IJsonService, JsonService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUsersRepository, UsersRepository>();
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<MainMenuViewModel>();
+            services.AddTransient<UserAdminViewModel>();
 
             return services.BuildServiceProvider();
         }
