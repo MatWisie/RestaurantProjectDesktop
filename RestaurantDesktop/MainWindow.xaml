@@ -8,16 +8,34 @@
         xmlns:view="clr-namespace:RestaurantDesktop.View"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="800" Width="1400">
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
             <view:LoginView />
         </DataTemplate>       
         <DataTemplate DataType="{x:Type vm:MainMenuViewModel}">
             <view:MainMenuView />
+        </DataTemplate>   
+        <DataTemplate DataType="{x:Type vm:UserAdminViewModel}">
+            <view:UsersAdminView />
+        </DataTemplate>      
+        <DataTemplate DataType="{x:Type vm:AddWorkerViewModel}">
+            <view:AddWorkerView />
+        </DataTemplate>       
+        <DataTemplate DataType="{x:Type vm:EditUserViewModel}">
+            <view:EditUserView />
         </DataTemplate>
     </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
         <ContentControl Content="{Binding MainViewModel}"/>
+        <mah:MetroProgressBar  Grid.Row="1"
+                               Margin="4"
+                               IsIndeterminate="True"  
+                               EllipseDiameter="15"
+                               Visibility="{Binding LoadingVisibility}"/>
     </Grid>
 </mah:MetroWindow>
