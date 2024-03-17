@@ -44,19 +44,8 @@ namespace RestaurantDesktop.ViewModel
         [RelayCommand]
         private void AddWorker()
         {
-            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(ConfirmPassword) || Age == 0)
+            if (CheckNullUserValues(UserName, Email, Password, ConfirmPassword, Age) || PasswordsNotSame(Password, ConfirmPassword) || PasswordDoesNotMeetPattern(Password))
             {
-                ErrorText = "Please complete all fields";
-                return;
-            }
-            if (Password != ConfirmPassword)
-            {
-                ErrorText = "Passwords are not the same";
-                return;
-            }
-            if (!passwordPattern.IsMatch(Password))
-            {
-                ErrorText = "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.";
                 return;
             }
             string token = _configurationService.GetConfiguration("UserToken");
@@ -77,7 +66,36 @@ namespace RestaurantDesktop.ViewModel
             {
                 ErrorText = string.IsNullOrEmpty(result.ErrorMessage) ? result.Content : result.ErrorMessage;
             }
+        }
 
+        private bool CheckNullUserValues(string UserName, string Email, string Password, string ConfirmPassword, int Age)
+        {
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(ConfirmPassword) || Age == 0)
+            {
+                ErrorText = "Please complete all fields";
+                return true;
+            }
+            return false;
+        }
+
+        private bool PasswordsNotSame(string Password, string ConfirmPassword)
+        {
+            if (Password != ConfirmPassword)
+            {
+                ErrorText = "Passwords are not the same";
+                return true;
+            }
+            return false;
+        }
+
+        private bool PasswordDoesNotMeetPattern(string Password)
+        {
+            if (!passwordPattern.IsMatch(Password))
+            {
+                ErrorText = "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.";
+                return true;
+            }
+            return false;
         }
     }
 }
