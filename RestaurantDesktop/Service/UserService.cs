@@ -1,5 +1,7 @@
 ﻿using RestaurantDesktop.Interface;
+using RestaurantDesktop.Model;
 using RestSharp;
+using System.Text.Json;
 
 namespace RestaurantDesktop.Service
 {
@@ -15,6 +17,12 @@ namespace RestaurantDesktop.Service
         public RestResponse GetUsers(string userToken)
         {
             return _usersRepository.GetUsers(userToken);
+        }
+
+        public RestResponse AddWorker(string userToken, UserAddModel userAddModel)
+        {
+            string json = JsonSerializer.Serialize(userAddModel);
+            return _usersRepository.AddWorker(userToken, json);
         }
     }
 }
