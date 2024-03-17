@@ -23,7 +23,8 @@ namespace RestaurantDesktop.ViewModel
         [ObservableProperty]
         private ObservableCollection<User> loadedUsers;
 
-        public void ReloadUsers()
+        [RelayCommand]
+        private void ReloadUsers()
         {
             var usersResponse = _userService.GetUsers(_configurationService.GetConfiguration("UserToken"));
             if (usersResponse.IsSuccessful && usersResponse.Content != null)
