@@ -13,5 +13,21 @@ namespace RestaurantDesktop.View
         {
             InitializeComponent();
         }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AddWorkerViewModel addWorkerViewModel)
+            {
+                addWorkerViewModel.Password = UserPassword.Password;
+            }
+        }
+
+        private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AddWorkerViewModel addWorkerViewModel)
+            {
+                addWorkerViewModel.ConfirmPassword = ConfirmUserPassword.Password;
+            }
+        }
     }
 }
