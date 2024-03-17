@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using RestaurantDesktop.Interface;
@@ -13,11 +14,13 @@ namespace RestaurantDesktop.ViewModel
         private readonly IUserService _userService;
         private readonly IConfigurationService _configurationService;
         private readonly IJsonService _jsonService;
-        public UserAdminViewModel(IUserService userService, IConfigurationService configurationService, IJsonService jsonService)
+        private readonly IAuthService _authService;
+        public UserAdminViewModel(IUserService userService, IConfigurationService configurationService, IJsonService jsonService, IAuthService authService)
         {
             _userService = userService;
             _configurationService = configurationService;
             _jsonService = jsonService;
+            _authService = authService;
             ReloadUsers();
         }
         [ObservableProperty]
@@ -30,6 +33,11 @@ namespace RestaurantDesktop.ViewModel
             if (usersResponse.IsSuccessful && usersResponse.Content != null)
                 LoadedUsers = new ObservableCollection<User>(_jsonService.ExtractUsersFromJson(usersResponse.Content));
             _authService.CheckIfLogout(usersResponse.StatusCode);
+        }
+        [RelayCommand]
+        private void GoToAddWorker()
+        {
+            WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<AddWorkerViewModel>()));
         }
     }
 }
