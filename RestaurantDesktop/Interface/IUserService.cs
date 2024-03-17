@@ -8,5 +8,6 @@ namespace RestaurantDesktop.Interface
         RestResponse GetUsers(string userToken);
         RestResponse AddWorker(string userToken, UserModel userAddModel);
         RestResponse EditUser(string userToken, UserEditModel userEditModel);
+        RestResponse DeleteUser(string userToken, string userIdToDelete);
     }
 }

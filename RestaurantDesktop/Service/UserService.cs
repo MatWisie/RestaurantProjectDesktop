@@ -30,5 +30,10 @@ namespace RestaurantDesktop.Service
             string json = JsonSerializer.Serialize(userEditModel);
             return _usersRepository.EditUser(userToken, json);
         }
+
+        public RestResponse DeleteUser(string userToken, string userIdToDelete)
+        {
+            return _usersRepository.DeleteUser(userToken, userIdToDelete);
+        }
     }
 }
