@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using RestaurantDesktop.Interface;
 using RestaurantDesktop.Model;
 using RestaurantDesktop.Model.Message;
-using System.Text.RegularExpressions;
 
 namespace RestaurantDesktop.ViewModel
 {
@@ -38,8 +37,6 @@ namespace RestaurantDesktop.ViewModel
 
         [ObservableProperty]
         private string errorText;
-
-        private Regex passwordPattern = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$");
 
         [RelayCommand]
         private void AddWorker()
@@ -96,7 +93,7 @@ namespace RestaurantDesktop.ViewModel
 
         private bool PasswordDoesNotMeetPattern(string Password)
         {
-            if (!passwordPattern.IsMatch(Password))
+            if (!PasswordPatternStatic.PasswordPattern.IsMatch(Password))
             {
                 ErrorText = "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.";
                 return true;
