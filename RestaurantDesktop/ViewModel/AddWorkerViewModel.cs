@@ -38,6 +38,46 @@ namespace RestaurantDesktop.ViewModel
 
         [ObservableProperty]
         private string errorText;
+
+        private Regex passwordPattern = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$");
+
+        [RelayCommand]
+        private void AddWorker()
+        {
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(ConfirmPassword) || Age == 0)
+            {
+                ErrorText = "Please complete all fields";
+                return;
+            }
+            if (Password != ConfirmPassword)
+            {
+                ErrorText = "Passwords are not the same";
+                return;
+            }
+            if (!passwordPattern.IsMatch(Password))
+            {
+                ErrorText = "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.";
+                return;
+            }
+            string token = _configurationService.GetConfiguration("UserToken");
+            UserAddModel userAddModel = new UserAddModel()
+            {
+                UserName = UserName,
+                Password = Password,
+                Email = Email,
+                Age = Age,
+            };
+            var result = _userService.AddWorker(token, userAddModel);
+            _authService.CheckIfLogout(result.StatusCode);
+            if (result.IsSuccessful)
+            {
+                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<UserAdminViewModel>()));
+            }
+            else
+            {
+                ErrorText = string.IsNullOrEmpty(result.ErrorMessage) ? result.Content : result.ErrorMessage;
+            }
+
         }
     }
 }
