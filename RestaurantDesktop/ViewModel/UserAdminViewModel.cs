@@ -39,5 +39,11 @@ namespace RestaurantDesktop.ViewModel
         {
             WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<AddWorkerViewModel>()));
         }
+
+        [RelayCommand]
+        private void GoToEdit(string userToEditId)
+        {
+            WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(new EditUserViewModel(userToEditId, App.Current.Services.GetService<IUserService>(), App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>())));
+        }
     }
 }
