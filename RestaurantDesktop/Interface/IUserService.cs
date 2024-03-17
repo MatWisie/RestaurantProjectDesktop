@@ -6,6 +6,6 @@ namespace RestaurantDesktop.Interface
     public interface IUserService
     {
         RestResponse GetUsers(string userToken);
-        RestResponse AddWorker(string userToken, UserAddModel userAddModel);
+        RestResponse AddWorker(string userToken, UserModel userAddModel);
     }
 }

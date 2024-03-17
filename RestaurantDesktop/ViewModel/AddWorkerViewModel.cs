@@ -49,7 +49,7 @@ namespace RestaurantDesktop.ViewModel
                 return;
             }
             string token = _configurationService.GetConfiguration("UserToken");
-            UserAddModel userAddModel = new UserAddModel()
+            UserModel userAddModel = new UserModel()
             {
                 UserName = UserName,
                 Password = Password,

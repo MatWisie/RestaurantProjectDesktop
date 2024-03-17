@@ -19,7 +19,7 @@ namespace RestaurantDesktop.Service
             return _usersRepository.GetUsers(userToken);
         }
 
-        public RestResponse AddWorker(string userToken, UserAddModel userAddModel)
+        public RestResponse AddWorker(string userToken, UserModel userAddModel)
         {
             string json = JsonSerializer.Serialize(userAddModel);
             return _usersRepository.AddWorker(userToken, json);
