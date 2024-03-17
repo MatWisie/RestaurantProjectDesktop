@@ -15,5 +15,17 @@ namespace RestaurantDesktop.Repository
 
             return client.Execute(request);
         }
+
+        public RestResponse AddWorker(string userToken, string json)
+        {
+            var options = new RestClientOptions(Connection.ApiAddress);
+            var client = new RestClient(options);
+            var request = new RestRequest("/register-worker", Method.Post);
+            request.AddJsonBody(json);
+
+            request.AddHeader("Authorization", $"Bearer {userToken}");
+
+            return client.Execute(request);
+        }
     }
 }
