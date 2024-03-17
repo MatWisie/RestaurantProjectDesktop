@@ -39,5 +39,17 @@ namespace RestaurantDesktop.Repository
 
             return client.Execute(request);
         }
+
+        public RestResponse DeleteUser(string userToken, string userIdToDelete)
+        {
+            var options = new RestClientOptions(Connection.ApiAddress);
+            var client = new RestClient(options);
+
+            var request = new RestRequest($"/delete-user/{userIdToDelete}", Method.Delete);
+
+            request.AddHeader("Authorization", $"Bearer {userToken}");
+
+            return client.Execute(request);
+        }
     }
 }
