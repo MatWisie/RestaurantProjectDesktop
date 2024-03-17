@@ -28,7 +28,7 @@
                     <mah:NumericUpDown Width="400" Value="{Binding Age, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="5" Text="{Binding ErrorText}" TextWrapping="Wrap" FontSize="15" Foreground="DarkRed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Button Content="Add new employee" FontSize="30" Margin="0 30 0 0" Grid.Row="4" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding AddWorkerCommand}" HorizontalAlignment="Center"/>
-                    <Button VerticalAlignment="Bottom" Grid.Row="2" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Stretch">
+                    <Button VerticalAlignment="Bottom" Grid.Row="2" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Stretch" Command="{Binding ReturnToUserAdminViewModelCommand}">
                         <Button.Content>
                             <mahIcons:Modern Kind="ArrowLeft" Height="30" Width="30"/>
                         </Button.Content>

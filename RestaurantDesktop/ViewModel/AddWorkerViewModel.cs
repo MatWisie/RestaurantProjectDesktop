@@ -60,12 +60,18 @@ namespace RestaurantDesktop.ViewModel
             _authService.CheckIfLogout(result.StatusCode);
             if (result.IsSuccessful)
             {
-                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<UserAdminViewModel>()));
+                ReturnToPreviousView();
             }
             else
             {
                 ErrorText = string.IsNullOrEmpty(result.ErrorMessage) ? result.Content : result.ErrorMessage;
             }
+        }
+
+        [RelayCommand]
+        private void ReturnToUserAdminViewModel()
+        {
+            ReturnToPreviousView();
         }
 
         private bool CheckNullUserValues(string UserName, string Email, string Password, string ConfirmPassword, int Age)
@@ -96,6 +102,11 @@ namespace RestaurantDesktop.ViewModel
                 return true;
             }
             return false;
+        }
+
+        private void ReturnToPreviousView()
+        {
+            WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<UserAdminViewModel>()));
         }
     }
 }
