@@ -27,6 +27,15 @@
         </DataTemplate>
     </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
         <ContentControl Content="{Binding MainViewModel}"/>
+        <mah:MetroProgressBar  Grid.Row="1"
+                               Margin="4"
+                               IsIndeterminate="True"  
+                               EllipseDiameter="15"
+                               Visibility="{Binding LoadingVisibility}"/>
     </Grid>
 </mah:MetroWindow>
