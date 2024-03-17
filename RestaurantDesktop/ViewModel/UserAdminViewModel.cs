@@ -29,10 +29,7 @@ namespace RestaurantDesktop.ViewModel
             var usersResponse = _userService.GetUsers(_configurationService.GetConfiguration("UserToken"));
             if (usersResponse.IsSuccessful && usersResponse.Content != null)
                 LoadedUsers = new ObservableCollection<User>(_jsonService.ExtractUsersFromJson(usersResponse.Content));
-            else if (usersResponse.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<LoginViewModel>()));
-            }
+            _authService.CheckIfLogout(usersResponse.StatusCode);
         }
     }
 }
