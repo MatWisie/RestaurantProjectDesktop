@@ -15,6 +15,10 @@
         </DataTemplate>       
         <DataTemplate DataType="{x:Type vm:MainMenuViewModel}">
             <view:MainMenuView />
+        </DataTemplate>   
+        <DataTemplate DataType="{x:Type vm:UserAdminViewModel}">
+            <view:UsersAdminView />
+        </DataTemplate>      
         </DataTemplate>
     </Window.Resources>
     <Grid>
