@@ -4,9 +4,9 @@ namespace RestaurantDesktop.Interface
 {
     public interface IUsersRepository
     {
-        RestResponse GetUsers(string userToken);
+        Task<RestResponse> GetUsers(string userToken);
         RestResponse AddWorker(string userToken, string json);
         RestResponse EditUser(string userToken, string json);
-        RestResponse DeleteUser(string userToken, string userIdToDelete);
+        Task<RestResponse> DeleteUser(string userToken, string userIdToDelete);
     }
 }

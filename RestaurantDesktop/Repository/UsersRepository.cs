@@ -5,7 +5,7 @@ namespace RestaurantDesktop.Repository
 {
     public class UsersRepository : IUsersRepository
     {
-        public RestResponse GetUsers(string userToken)
+        public async Task<RestResponse> GetUsers(string userToken)
         {
             var options = new RestClientOptions(Connection.ApiAddress);
             var client = new RestClient(options);
@@ -13,7 +13,7 @@ namespace RestaurantDesktop.Repository
 
             request.AddHeader("Authorization", $"Bearer {userToken}");
 
-            return client.Execute(request);
+            return await client.ExecuteAsync(request);
         }
 
         public RestResponse AddWorker(string userToken, string json)
@@ -40,7 +40,7 @@ namespace RestaurantDesktop.Repository
             return client.Execute(request);
         }
 
-        public RestResponse DeleteUser(string userToken, string userIdToDelete)
+        public async Task<RestResponse> DeleteUser(string userToken, string userIdToDelete)
         {
             var options = new RestClientOptions(Connection.ApiAddress);
             var client = new RestClient(options);
@@ -49,7 +49,7 @@ namespace RestaurantDesktop.Repository
 
             request.AddHeader("Authorization", $"Bearer {userToken}");
 
-            return client.Execute(request);
+            return await client.ExecuteAsync(request);
         }
     }
 }

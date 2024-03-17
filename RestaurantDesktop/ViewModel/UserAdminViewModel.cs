@@ -27,12 +27,14 @@ namespace RestaurantDesktop.ViewModel
         private ObservableCollection<User> loadedUsers;
 
         [RelayCommand]
-        private void ReloadUsers()
+        private async Task ReloadUsers()
         {
-            var usersResponse = _userService.GetUsers(_configurationService.GetConfiguration("UserToken"));
+            SendLoadingBegin();
+            var usersResponse = await _userService.GetUsers(_configurationService.GetConfiguration("UserToken"));
             if (usersResponse.IsSuccessful && usersResponse.Content != null)
                 LoadedUsers = new ObservableCollection<User>(_jsonService.ExtractUsersFromJson(usersResponse.Content));
             _authService.CheckIfLogout(usersResponse.StatusCode);
+            SendLoadingEnd();
         }
         [RelayCommand]
         private void GoToAddWorker()
@@ -47,15 +49,26 @@ namespace RestaurantDesktop.ViewModel
         }
 
         [RelayCommand]
-        private void DeleteUser(string userId)
+        private async Task DeleteUser(string userId)
         {
-            var userResponse = _userService.DeleteUser(_configurationService.GetConfiguration("UserToken"), userId);
+            SendLoadingBegin();
+            var userResponse = await _userService.DeleteUser(_configurationService.GetConfiguration("UserToken"), userId);
             if (userResponse.IsSuccessful)
             {
                 var userToDelete = LoadedUsers.FirstOrDefault(e => e.Id == userId);
                 LoadedUsers.Remove(userToDelete);
             }
             _authService.CheckIfLogout(userResponse.StatusCode);
+            SendLoadingEnd();
+        }
+
+        private void SendLoadingBegin()
+        {
+            WeakReferenceMessenger.Default.Send(new LoadingBeginMessage());
+        }
+        private void SendLoadingEnd()
+        {
+            WeakReferenceMessenger.Default.Send(new LoadingEndMessage());
         }
     }
 }

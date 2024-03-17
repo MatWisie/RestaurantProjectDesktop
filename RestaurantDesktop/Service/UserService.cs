@@ -14,9 +14,9 @@ namespace RestaurantDesktop.Service
             _usersRepository = usersRepository;
             _configurationService = configurationService;
         }
-        public RestResponse GetUsers(string userToken)
+        public async Task<RestResponse> GetUsers(string userToken)
         {
-            return _usersRepository.GetUsers(userToken);
+            return await _usersRepository.GetUsers(userToken);
         }
 
         public RestResponse AddWorker(string userToken, UserModel userAddModel)
@@ -31,9 +31,9 @@ namespace RestaurantDesktop.Service
             return _usersRepository.EditUser(userToken, json);
         }
 
-        public RestResponse DeleteUser(string userToken, string userIdToDelete)
+        public async Task<RestResponse> DeleteUser(string userToken, string userIdToDelete)
         {
-            return _usersRepository.DeleteUser(userToken, userIdToDelete);
+            return await _usersRepository.DeleteUser(userToken, userIdToDelete);
         }
     }
 }

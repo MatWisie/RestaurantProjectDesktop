@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using RestaurantDesktop.Interface;
 using RestaurantDesktop.Model.Message;
+using System.Windows;
 
 namespace RestaurantDesktop.ViewModel
 {
@@ -13,6 +14,9 @@ namespace RestaurantDesktop.ViewModel
         {
             _configurationService = configurationService;
             WeakReferenceMessenger.Default.Register<ChangeMainViewMessage>(this, (r, m) => ChangeMainViewModel(m.ViewModel));
+            WeakReferenceMessenger.Default.Register<LoadingBeginMessage>(this, (r, m) => LoadingVisibility = Visibility.Visible);
+            WeakReferenceMessenger.Default.Register<LoadingEndMessage>(this, (r, m) => LoadingVisibility = Visibility.Collapsed);
+            LoadingVisibility = Visibility.Collapsed;
             if (string.IsNullOrEmpty(_configurationService.GetConfiguration("UserToken")))
                 MainViewModel = App.Current.Services.GetService<LoginViewModel>();
             else
@@ -25,5 +29,8 @@ namespace RestaurantDesktop.ViewModel
         {
             MainViewModel = viewModel;
         }
+
+        [ObservableProperty]
+        private Visibility loadingVisibility;
     }
 }
