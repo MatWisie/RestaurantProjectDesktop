@@ -24,5 +24,11 @@ namespace RestaurantDesktop.Service
             string json = JsonSerializer.Serialize(userAddModel);
             return _usersRepository.AddWorker(userToken, json);
         }
+
+        public RestResponse EditUser(string userToken, UserEditModel userEditModel)
+        {
+            string json = JsonSerializer.Serialize(userEditModel);
+            return _usersRepository.EditUser(userToken, json);
+        }
     }
 }
