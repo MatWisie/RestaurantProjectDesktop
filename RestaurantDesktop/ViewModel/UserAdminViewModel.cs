@@ -45,5 +45,17 @@ namespace RestaurantDesktop.ViewModel
         {
             WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(new EditUserViewModel(userToEditId, App.Current.Services.GetService<IUserService>(), App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>())));
         }
+
+        [RelayCommand]
+        private void DeleteUser(string userId)
+        {
+            var userResponse = _userService.DeleteUser(_configurationService.GetConfiguration("UserToken"), userId);
+            if (userResponse.IsSuccessful)
+            {
+                var userToDelete = LoadedUsers.FirstOrDefault(e => e.Id == userId);
+                LoadedUsers.Remove(userToDelete);
+            }
+            _authService.CheckIfLogout(userResponse.StatusCode);
+        }
     }
 }
