@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RestaurantDesktop.Interface;
 using RestaurantDesktop.Model;
 using RestaurantDesktop.Model.Message;
+using RestaurantDesktop.Service;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -30,12 +31,12 @@ namespace RestaurantDesktop.ViewModel
         [RelayCommand]
         private async Task ReloadUsers()
         {
-            SendLoadingBegin();
+            MessageService.SendLoadingBegin();
             var usersResponse = await _userService.GetUsers(_configurationService.GetConfiguration("UserToken"));
             if (usersResponse.IsSuccessful && usersResponse.Content != null)
                 LoadedUsers = new ObservableCollection<User>(_jsonService.ExtractUsersFromJson(usersResponse.Content));
             _authService.CheckIfLogout(usersResponse.StatusCode);
-            SendLoadingEnd();
+            MessageService.SendLoadingEnd();
         }
         [RelayCommand]
         private void GoToAddWorker()
@@ -54,7 +55,7 @@ namespace RestaurantDesktop.ViewModel
         {
             if (MessageBox.Show("Are you sure you want to delete this user?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.OK)
             {
-                SendLoadingBegin();
+                MessageService.SendLoadingBegin();
                 var userResponse = await _userService.DeleteUser(_configurationService.GetConfiguration("UserToken"), userId);
                 if (userResponse.IsSuccessful)
                 {
@@ -62,17 +63,14 @@ namespace RestaurantDesktop.ViewModel
                     LoadedUsers.Remove(userToDelete);
                 }
                 _authService.CheckIfLogout(userResponse.StatusCode);
-                SendLoadingEnd();
+                MessageService.SendLoadingEnd();
             }
         }
 
-        private void SendLoadingBegin()
+        [RelayCommand]
+        private void GoToMainMenu()
         {
-            WeakReferenceMessenger.Default.Send(new LoadingBeginMessage());
-        }
-        private void SendLoadingEnd()
-        {
-            WeakReferenceMessenger.Default.Send(new LoadingEndMessage());
+            MessageService.SendChangeViewMessage(App.Current.Services.GetService<MainMenuViewModel>());
         }
     }
 }
