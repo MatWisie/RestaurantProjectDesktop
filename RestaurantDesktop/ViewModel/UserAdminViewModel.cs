@@ -6,6 +6,7 @@ using RestaurantDesktop.Interface;
 using RestaurantDesktop.Model;
 using RestaurantDesktop.Model.Message;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace RestaurantDesktop.ViewModel
 {
@@ -51,15 +52,18 @@ namespace RestaurantDesktop.ViewModel
         [RelayCommand]
         private async Task DeleteUser(string userId)
         {
-            SendLoadingBegin();
-            var userResponse = await _userService.DeleteUser(_configurationService.GetConfiguration("UserToken"), userId);
-            if (userResponse.IsSuccessful)
+            if (MessageBox.Show("Are you sure you want to delete this user?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.OK)
             {
-                var userToDelete = LoadedUsers.FirstOrDefault(e => e.Id == userId);
-                LoadedUsers.Remove(userToDelete);
+                SendLoadingBegin();
+                var userResponse = await _userService.DeleteUser(_configurationService.GetConfiguration("UserToken"), userId);
+                if (userResponse.IsSuccessful)
+                {
+                    var userToDelete = LoadedUsers.FirstOrDefault(e => e.Id == userId);
+                    LoadedUsers.Remove(userToDelete);
+                }
+                _authService.CheckIfLogout(userResponse.StatusCode);
+                SendLoadingEnd();
             }
-            _authService.CheckIfLogout(userResponse.StatusCode);
-            SendLoadingEnd();
         }
 
         private void SendLoadingBegin()
