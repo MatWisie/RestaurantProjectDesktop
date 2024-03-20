@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="RestaurantDesktop.View.DishesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RestaurantDesktop.View"
+             xmlns:vm="clr-namespace:RestaurantDesktop.ViewModel"
+             mc:Ignorable="d" 
+             d:Background="White"
+             xmlns:mahIcons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             d:DataContext="{d:DesignInstance Type=vm:DishesViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <mahIcons:Modern Kind="Food"  Height="100" Width="100"/>
+        <ListView ItemsSource="{Binding LoadedDishes}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <Grid ShowGridLines="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="300"/>
+                                <ColumnDefinition Width="300"/>
+                                <ColumnDefinition Width="300"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Background="Aqua" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <mahIcons:Modern Kind="Food" Height="30" Width="30"/>
+                            </Grid>
+                            <TextBlock Text="{Binding name}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding price}" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding availability}" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Button Content="Edit" Grid.Column="4" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding DataContext.GoToEditCommand, RelativeSource={RelativeSource AncestorType={x:Type local:UsersAdminView}}}" CommandParameter="{Binding Id}"/>
+                            <Button Content="Delete" Grid.Column="5" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Background="DarkRed" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType={x:Type local:UsersAdminView}}}" CommandParameter="{Binding Id}"/>
+                        </Grid>
+                        <Expander Header="Description">
+                            <TextBlock Text="{Binding description}"/>
+                        </Expander>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Border Grid.Column="1" Background="#4887b5" BorderBrush="Blue">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding GoToAddDishCommand}" Background="ForestGreen" Foreground="White">
+                    <Button.Content>
+                        <mahIcons:Modern Kind="Add" Height="30" Width="30"/>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Row="1" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding ReloadDishesCommand}">
+                    <Button.Content>
+                        <mahIcons:Modern Kind="Refresh" Height="30" Width="30"/>
+                    </Button.Content>
+                </Button>
+                <Button VerticalAlignment="Bottom" Grid.Row="2" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Stretch" Command="{Binding GoToMainMenuCommand}">
+                    <Button.Content>
+                        <mahIcons:Modern Kind="ArrowRight" Height="30" Width="30"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
