@@ -28,12 +28,16 @@ namespace RestaurantDesktop
             services.AddScoped<IJsonService, JsonService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<IDishService, DishService>();
+            services.AddScoped<IDishesRepository, DishesRepository>();
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<MainMenuViewModel>();
             services.AddTransient<UserAdminViewModel>();
             services.AddTransient<AddWorkerViewModel>();
+            services.AddTransient<DishesViewModel>();
+            services.AddTransient<AddDishViewModel>();
 
             return services.BuildServiceProvider();
         }

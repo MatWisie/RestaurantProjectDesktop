@@ -24,6 +24,12 @@
         </DataTemplate>       
         <DataTemplate DataType="{x:Type vm:EditUserViewModel}">
             <view:EditUserView />
+        </DataTemplate>       
+        <DataTemplate DataType="{x:Type vm:DishesViewModel}">
+            <view:DishesView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AddDishViewModel}">
+            <view:AddDishView />
         </DataTemplate>
     </Window.Resources>
     <Grid>
