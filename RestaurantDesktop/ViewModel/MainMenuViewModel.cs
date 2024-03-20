@@ -34,5 +34,12 @@ namespace RestaurantDesktop.ViewModel
             if (_configurationService.GetConfiguration("UserRole") == "Admin")
                 WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<UserAdminViewModel>()));
         }
+
+        [RelayCommand]
+        private void GoToDishes()
+        {
+            if (_configurationService.GetConfiguration("UserRole") == "Admin")
+                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<DishesViewModel>()));
+        }
     }
 }
