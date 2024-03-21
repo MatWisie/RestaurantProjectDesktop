@@ -16,36 +16,77 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <mahIcons:Modern Kind="Food"  Height="100" Width="100"/>
-        <ListView ItemsSource="{Binding LoadedDishes}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <Grid ShowGridLines="True">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="300"/>
-                                <ColumnDefinition Width="300"/>
-                                <ColumnDefinition Width="300"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Background="Aqua" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <mahIcons:Modern Kind="Food" Height="30" Width="30"/>
-                            </Grid>
-                            <TextBlock Text="{Binding name}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding price}" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding availability}" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Button Content="Edit" Grid.Column="4" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding DataContext.GoToEditCommand, RelativeSource={RelativeSource AncestorType={x:Type local:UsersAdminView}}}" CommandParameter="{Binding Id}"/>
-                            <Button Content="Delete" Grid.Column="5" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Background="DarkRed" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType={x:Type local:UsersAdminView}}}" CommandParameter="{Binding Id}"/>
-                        </Grid>
-                        <Expander Header="Description">
-                            <TextBlock Text="{Binding description}"/>
-                        </Expander>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+        <Grid>
+            <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray">
+                <mahIcons:Modern Kind="Food" Height="100" Width="100" RotationAngle="45"/>
+            </ContentControl>
+        </Grid>
+
+        <ListView ItemsSource="{Binding LoadedDishes}" Margin="0 20 0 0" Background="Transparent">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="200" Header="Name">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Grid Background="LightBlue">
+                                        <mahIcons:Modern Kind="FoodSilverwareCross" Height="30" Width="30"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding name}" Margin="5 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Price" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding price}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Availability column -->
+                    <GridViewColumn Header="Availability" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding availability}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Description" Width="200">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Expander Header="Description" IsExpanded="False">
+                                    <TextBlock Text="{Binding description}" TextWrapping="Wrap"/>
+                                </Expander>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Edit column -->
+                    <GridViewColumn Header="Edit" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Edit" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding DataContext.GoToEditCommand, RelativeSource={RelativeSource AncestorType={x:Type local:DishesView}}}" CommandParameter="{Binding id}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Delete column -->
+                    <GridViewColumn Header="Delete" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Delete" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Background="DarkRed" Command="{Binding DataContext.DeleteDishCommand, RelativeSource={RelativeSource AncestorType={x:Type local:DishesView}}}" CommandParameter="{Binding id}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                </GridView>
+            </ListView.View>
         </ListView>
+
+
         <Border Grid.Column="1" Background="#4887b5" BorderBrush="Blue">
             <Grid>
                 <Grid.RowDefinitions>
