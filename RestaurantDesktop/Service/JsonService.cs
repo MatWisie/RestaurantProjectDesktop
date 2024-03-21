@@ -98,7 +98,7 @@ namespace RestaurantDesktop.Service
                     name = dishObj["name"].ToString(),
                     description = dishObj["description"].ToString(),
                     availability = dishObj["availability"].Value<bool>(),
-                    price = dishObj["availability"].Value<double>()
+                    price = dishObj["price"].Value<double>()
 
                 };
 
