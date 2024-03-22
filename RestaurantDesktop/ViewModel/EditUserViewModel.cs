@@ -14,12 +14,14 @@ namespace RestaurantDesktop.ViewModel
         private readonly IConfigurationService _configurationService;
         private readonly IAuthService _authService;
         private readonly string _userIdToEdit;
-        public EditUserViewModel(string userId, IUserService userService, IConfigurationService configurationService, IAuthService authService)
+        public EditUserViewModel(User user, IUserService userService, IConfigurationService configurationService, IAuthService authService)
         {
-            _userIdToEdit = userId;
+            _userIdToEdit = user.Id;
             _userService = userService;
             _configurationService = configurationService;
             _authService = authService;
+
+            UserName = user.UserName;
         }
 
         [ObservableProperty]
