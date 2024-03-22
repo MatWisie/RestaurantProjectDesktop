@@ -30,6 +30,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:AddDishViewModel}">
             <view:AddDishView />
+        </DataTemplate>  
+        <DataTemplate DataType="{x:Type vm:EditDishViewModel}">
+            <view:EditDishView />
         </DataTemplate>
     </Window.Resources>
     <Grid>
