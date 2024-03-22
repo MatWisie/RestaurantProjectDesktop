@@ -41,7 +41,7 @@ namespace RestaurantDesktop.ViewModel
         [RelayCommand]
         private async Task DeleteDish(string dishId)
         {
-            if (MessageBox.Show("Are you sure you want to delete this dish?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.OK)
+            if (MessageBox.Show("Are you sure you want to delete this dish?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 MessageService.SendLoadingBegin();
                 var dishResponse = await _dishService.DeleteDish(_configurationService.GetConfiguration("UserToken"), dishId);
@@ -65,6 +65,12 @@ namespace RestaurantDesktop.ViewModel
         private void GoToAddDish()
         {
             MessageService.SendChangeViewMessage(App.Current.Services.GetService<AddDishViewModel>());
+        }
+
+        [RelayCommand]
+        private void GoToEditDish(DishWithIdModel dishWithId)
+        {
+            MessageService.SendChangeViewMessage(new EditDishViewModel(dishWithId, App.Current.Services.GetService<IDishService>(), App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>()));
         }
     }
 }
