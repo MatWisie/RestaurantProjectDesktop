@@ -36,7 +36,7 @@
                             </Grid>
                             <TextBlock Text="{Binding UserName}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             <TextBlock Text="{Binding Role}" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Button Content="Edit" Grid.Column="3" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding DataContext.GoToEditCommand, RelativeSource={RelativeSource AncestorType={x:Type local:UsersAdminView}}}" CommandParameter="{Binding Id}"/>
+                            <Button Content="Edit" Grid.Column="3" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding DataContext.GoToEditCommand, RelativeSource={RelativeSource AncestorType={x:Type local:UsersAdminView}}}" CommandParameter="{Binding}"/>
                             <Button Content="Delete" Grid.Column="4" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Background="DarkRed" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType={x:Type local:UsersAdminView}}}" CommandParameter="{Binding Id}"/>
                         </Grid>
                     </StackPanel>
