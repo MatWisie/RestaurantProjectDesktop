@@ -45,9 +45,9 @@ namespace RestaurantDesktop.ViewModel
         }
 
         [RelayCommand]
-        private void GoToEdit(string userToEditId)
+        private void GoToEdit(User userToEdit)
         {
-            WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(new EditUserViewModel(userToEditId, App.Current.Services.GetService<IUserService>(), App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>())));
+            WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(new EditUserViewModel(userToEdit, App.Current.Services.GetService<IUserService>(), App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>())));
         }
 
         [RelayCommand]
