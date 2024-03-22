@@ -74,5 +74,38 @@ namespace RestaurantDesktop.Service
 
             return users;
         }
+        public List<DishWithIdModel> ExtractDishesFromJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                throw new ArgumentNullException("JSON string cannot be null or empty");
+            }
+
+            JArray jsonArray = JArray.Parse(json);
+
+            if (jsonArray == null)
+            {
+                throw new Exception("Failed to parse JSON");
+            }
+
+            List<DishWithIdModel> dishes = new List<DishWithIdModel>();
+
+            foreach (JObject dishObj in jsonArray)
+            {
+                DishWithIdModel dish = new DishWithIdModel
+                {
+                    id = dishObj["id"].ToString(),
+                    name = dishObj["name"].ToString(),
+                    description = dishObj["description"].ToString(),
+                    availability = dishObj["availability"].Value<bool>(),
+                    price = dishObj["price"].Value<double>()
+
+                };
+
+                dishes.Add(dish);
+            }
+
+            return dishes;
+        }
     }
 }
