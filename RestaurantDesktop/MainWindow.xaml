@@ -34,6 +34,9 @@
         <DataTemplate DataType="{x:Type vm:EditDishViewModel}">
             <view:EditDishView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TablesViewModel}">
+            <view:TablesView />
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
