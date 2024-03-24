@@ -107,5 +107,28 @@ namespace RestaurantDesktop.Service
 
             return dishes;
         }
+
+        public TableGridModel ExtractTableGridDataFromJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                throw new ArgumentNullException("JSON string cannot be null or empty");
+            }
+
+            JObject jsonGridData = JObject.Parse(json);
+
+            if (jsonGridData == null)
+            {
+                throw new Exception("Failed to parse JSON");
+            }
+
+            TableGridModel gridData = new TableGridModel()
+            {
+                NumberOfRows = jsonGridData["numberOfRows"].Value<int>(),
+                NumberOfColumns = jsonGridData["numberOfColumns"].Value<int>(),
+            };
+
+            return gridData;
+        }
     }
 }
