@@ -38,8 +38,16 @@ namespace RestaurantDesktop.ViewModel
         [RelayCommand]
         private void GoToDishes()
         {
-            if (_configurationService.GetConfiguration("UserRole") == "Admin")
+            string role = _configurationService.GetConfiguration("UserRole");
+            if (role == "Admin" || role == "Worker")
                 WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<DishesViewModel>()));
+        }
+        [RelayCommand]
+        private void GoToTables()
+        {
+            string role = _configurationService.GetConfiguration("UserRole");
+            if (role == "Admin" || role == "Worker")
+                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<TablesViewModel>()));
         }
     }
 }
