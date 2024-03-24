@@ -41,6 +41,71 @@ namespace RestaurantDesktop.ViewModel
         [ObservableProperty]
         private string errorText;
 
+        [RelayCommand]
+        private void AddTable()
+        {
+            if (CheckNullTableValues(NumberOfSeats))
+            {
+                return;
+            }
+            if (CheckGrids(GridRow, GridColumn))
+            {
+                return;
+            }
+            string token = _configurationService.GetConfiguration("UserToken");
+            TableModel tableAddModel = new TableModel()
+            {
+                IsAvailable = IsAvailable,
+                NumberOfSeats = NumberOfSeats,
+                GridRow = GridRow,
+                GridColumn = GridColumn,
+            };
+            var result = _tableService.AddTable(token, tableAddModel);
+            _authService.CheckIfLogout(result.StatusCode);
+            if (result.IsSuccessful)
+            {
+                ReturnToPreviousView();
+            }
+            else
+            {
+                ErrorText = string.IsNullOrEmpty(result.ErrorMessage) ? result.Content : result.ErrorMessage;
+            }
+        }
+        private bool CheckNullTableValues(int numberOfSeats)
+        {
+            if (numberOfSeats == 0)
+            {
+                ErrorText = "Please complete all fields";
+                return true;
+            }
+            return false;
+        }
+
+        private bool CheckGrids(int gridRow, int gridColumn)
+        {
+            if (gridRow > _gridModel.NumberOfRows || gridColumn > _gridModel.NumberOfColumns)
+            {
+                ErrorText = "Please complete all fields";
+                return true;
+            }
+            if (_tables.Any(e => e.GridRow == gridRow && e.GridColumn == gridColumn))
+            {
+                ErrorText = "There already is table on this location";
+                return true;
+            }
+            return false;
+        }
+
+        [RelayCommand]
+        private void ReturnToTablesViewModel()
+        {
+            ReturnToPreviousView();
+        }
+
+        private void ReturnToPreviousView()
+        {
+            WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<TablesViewModel>()));
+        }
 
     }
 }
