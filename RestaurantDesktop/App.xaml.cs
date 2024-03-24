@@ -43,6 +43,7 @@ namespace RestaurantDesktop
             services.AddTransient<DishesViewModel>();
             services.AddTransient<AddDishViewModel>();
             services.AddTransient<EditDishViewModel>();
+            services.AddTransient<TablesViewModel>();
 
             return services.BuildServiceProvider();
         }
