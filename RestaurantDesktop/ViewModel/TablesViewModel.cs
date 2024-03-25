@@ -57,5 +57,17 @@ namespace RestaurantDesktop.ViewModel
             }
             MessageService.SendLoadingEnd();
         }
+
+        [RelayCommand]
+        private void GoToAddTable()
+        {
+            MessageService.SendChangeViewMessage(new AddTableViewModel(tableGridModel, tables, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<ITableService>())); //App.Current.Services.GetService<AddTableViewModel>());
+        }
+
+        [RelayCommand]
+        private void GoToMainMenu()
+        {
+            MessageService.SendChangeViewMessage(App.Current.Services.GetService<MainMenuViewModel>());
+        }
     }
 }
