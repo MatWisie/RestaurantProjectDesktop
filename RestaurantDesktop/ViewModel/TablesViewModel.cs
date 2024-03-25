@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MahApps.Metro.IconPacks;
+using Microsoft.Extensions.DependencyInjection;
 using RestaurantDesktop.Interface;
 using RestaurantDesktop.Model;
 using RestaurantDesktop.Service;
@@ -30,7 +32,14 @@ namespace RestaurantDesktop.ViewModel
         [ObservableProperty]
         private Grid tableGrid;
 
-        private async void BuildTableGrid()
+        [ObservableProperty]
+        private PackIconControlBase selectedTable;
+
+        private TableGridModel tableGridModel;
+        private List<TableWithIdModel> tables;
+
+        [RelayCommand]
+        private async Task BuildTableGrid()
         {
             MessageService.SendLoadingBegin();
             var dishResponse = await _gridService.GetGrid(_configurationService.GetConfiguration("UserToken"));
@@ -39,16 +48,18 @@ namespace RestaurantDesktop.ViewModel
             _authService.CheckIfLogout(tablesResponse.StatusCode);
             if (dishResponse.IsSuccessful && dishResponse.Content != null && tablesResponse.IsSuccessful && tablesResponse.Content != null)
             {
-                TableGridModel gridData = _jsonService.ExtractTableGridDataFromJson(dishResponse.Content);
-                TableGrid = _gridService.BuildGrid(gridData);
+                tableGridModel = _jsonService.ExtractTableGridDataFromJson(dishResponse.Content);
+                TableGrid = _gridService.BuildGrid(tableGridModel);
 
-                List<TableWithIdModel> tables = _jsonService.ExtractTablesFromJson(tablesResponse.Content);
+                tables = _jsonService.ExtractTablesFromJson(tablesResponse.Content);
                 foreach (var table in tables)
                 {
                     PackIconBoxIcons tableIcon = new PackIconBoxIcons()
                     {
                         Kind = PackIconBoxIconsKind.RegularChair,
-                        DataContext = table
+                        DataContext = table,
+                        HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
+                        VerticalAlignment = System.Windows.VerticalAlignment.Stretch
                     };
                     Grid.SetRow(tableIcon, table.GridRow);
                     Grid.SetColumn(tableIcon, table.GridColumn);
