@@ -37,6 +37,9 @@
         <DataTemplate DataType="{x:Type vm:TablesViewModel}">
             <view:TablesView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AddTableViewModel}">
+            <view:AddTableView />
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
