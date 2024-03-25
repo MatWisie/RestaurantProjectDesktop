@@ -53,6 +53,7 @@ namespace RestaurantDesktop.ViewModel
                 return;
             }
             string token = _configurationService.GetConfiguration("UserToken");
+
             TableModel tableAddModel = new TableModel()
             {
                 IsAvailable = IsAvailable,
@@ -83,7 +84,7 @@ namespace RestaurantDesktop.ViewModel
 
         private bool CheckGrids(int gridRow, int gridColumn)
         {
-            if (gridRow > _gridModel.NumberOfRows || gridColumn > _gridModel.NumberOfColumns)
+            if (gridRow > _gridModel.NumberOfRows || gridColumn > _gridModel.NumberOfColumns || gridRow < 0 || gridColumn < 0)
             {
                 ErrorText = "Please complete all fields";
                 return true;

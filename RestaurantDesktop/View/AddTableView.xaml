@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="RestaurantDesktop.View.AddTableView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RestaurantDesktop.View"
+             mc:Ignorable="d" 
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:mahIcons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:vm="clr-namespace:RestaurantDesktop.ViewModel"
+             d:DataContext="{d:DesignInstance Type=vm:AddTableViewModel}"
+             d:Background="White"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <GroupBox Header="AddTable" HorizontalAlignment="Center" VerticalAlignment="Center" Height="400">
+            <ScrollViewer>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding SizeOfGrid}" FontWeight="Bold"/>
+                    <TextBlock Text="Number of seats" VerticalAlignment="Center"/>
+                    <mah:NumericUpDown Grid.Row="1" Width="400" HorizontalAlignment="Center" VerticalAlignment="Center" Value="{Binding NumberOfSeats, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Grid row" Grid.Row="2" VerticalAlignment="Center" Margin="0 30 0 0"/>
+                    <mah:NumericUpDown Width="400" Value="{Binding GridRow, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Text="Grid column" Grid.Row="2" VerticalAlignment="Center" Margin="0 30 0 0"/>
+                    <mah:NumericUpDown Width="400" Value="{Binding GridColumn, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0 30 0 0">
+                        <TextBlock Text="Availability"/>
+                        <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsAvailable}" Margin="10 0 0 0"/>
+                    </StackPanel>
+                    <TextBlock Grid.Row="5" Text="{Binding ErrorText}" TextWrapping="Wrap" FontSize="15" Foreground="DarkRed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Button Content="Add new table" FontSize="30" Margin="0 30 0 0" Grid.Row="4" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding AddTableCommand}" HorizontalAlignment="Center"/>
+                    <Button VerticalAlignment="Bottom" Grid.Row="2" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Stretch" Command="{Binding ReturnToTablesViewModelCommand}">
+                        <Button.Content>
+                            <mahIcons:Modern Kind="ArrowLeft" Height="30" Width="30"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
+        </GroupBox>
+    </Grid>
+</UserControl>
