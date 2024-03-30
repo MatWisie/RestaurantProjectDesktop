@@ -9,5 +9,6 @@ namespace RestaurantDesktop.Interface
         Task<RestResponse> DeleteTable(string userToken, string tableIdToDelete);
         RestResponse EditTable(string userToken, TableModel tableEditModel, string tableIdToEdit);
         Task<RestResponse> GetTables(string userToken);
+        TableWithIdModel CopyTableModel(TableWithIdModel model);
     }
 }

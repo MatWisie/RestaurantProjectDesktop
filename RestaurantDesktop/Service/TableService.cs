@@ -33,5 +33,18 @@ namespace RestaurantDesktop.Service
         {
             return await _tablesRepository.DeleteTable(userToken, tableIdToDelete);
         }
+
+        public static TableWithIdModel CopyTableModel(TableWithIdModel model)
+        {
+            return new TableWithIdModel()
+            {
+                Id = model.Id,
+                IsAvailable = model.IsAvailable,
+                NumberOfSeats = model.NumberOfSeats,
+                GridColumn = model.GridColumn,
+                GridRow = model.GridRow,
+
+            };
+        }
     }
 }
