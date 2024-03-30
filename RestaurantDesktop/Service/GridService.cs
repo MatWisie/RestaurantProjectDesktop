@@ -1,8 +1,12 @@
-﻿using RestaurantDesktop.Interface;
+﻿using MahApps.Metro.IconPacks;
+using RestaurantDesktop.Interface;
 using RestaurantDesktop.Model;
 using RestSharp;
 using System.Text.Json;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace RestaurantDesktop.Service
 {
@@ -39,5 +43,16 @@ namespace RestaurantDesktop.Service
             tmpGrid.ShowGridLines = true;
             return tmpGrid;
         }
+
+        public Rectangle BuildDropRectangle()
+        {
+            Rectangle rectangle = new Rectangle();
+            rectangle.HorizontalAlignment = HorizontalAlignment.Stretch;
+            rectangle.VerticalAlignment = VerticalAlignment.Stretch;
+            rectangle.Fill = new SolidColorBrush(Colors.White);
+            rectangle.AllowDrop = true;
+            return rectangle;
+        }
+
     }
 }
