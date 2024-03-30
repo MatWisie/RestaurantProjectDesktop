@@ -1,6 +1,8 @@
-﻿using RestaurantDesktop.Model;
+﻿using MahApps.Metro.IconPacks;
+using RestaurantDesktop.Model;
 using RestSharp;
 using System.Windows.Controls;
+using System.Windows.Shapes;
 
 namespace RestaurantDesktop.Interface
 {
@@ -10,5 +12,6 @@ namespace RestaurantDesktop.Interface
         Task<RestResponse> GetGrid(string userToken);
         Grid BuildGrid(TableGridModel gridData);
         Rectangle BuildDropRectangle();
+        PackIconBoxIcons BuildPackIcon(TableWithIdModel? table);
     }
 }

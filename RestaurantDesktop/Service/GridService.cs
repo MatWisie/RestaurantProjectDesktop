@@ -54,5 +54,18 @@ namespace RestaurantDesktop.Service
             return rectangle;
         }
 
+        public PackIconBoxIcons BuildPackIcon(TableWithIdModel? table)
+        {
+            PackIconBoxIcons tableIcon = new PackIconBoxIcons()
+            {
+                Kind = PackIconBoxIconsKind.RegularChair,
+                DataContext = table,
+                Width = 30,
+                Height = 30,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
+                VerticalAlignment = System.Windows.VerticalAlignment.Stretch
+            };
+            return tableIcon;
+        }
     }
 }
