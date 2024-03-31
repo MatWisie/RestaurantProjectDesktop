@@ -28,7 +28,8 @@ namespace RestaurantDesktop.ViewModel
             _configurationService = configurationService;
             _authService = authService;
             _jsonService = jsonService;
-            orgintalTablesIcons = new List<TableWithIdModel>();
+            orgintalTables = new List<TableWithIdModel>();
+            modifiedTables = new List<TableWithIdModel>();
 
             BuildTableGrid();
 
@@ -42,8 +43,26 @@ namespace RestaurantDesktop.ViewModel
 
         private TableGridModel tableGridModel;
         private List<TableWithIdModel> tables;
-        private List<TableWithIdModel> orgintalTablesIcons;
+        private List<TableWithIdModel> orgintalTables;
         private List<TableWithIdModel> modifiedTables;
+
+        public string ModifiedTablesMessage
+        {
+            get
+            {
+                if (modifiedTables.Count > 0)
+                {
+                    ModifiedMessageVisibility = Visibility.Visible;
+                    return $"Modified: {modifiedTables.Count}";
+                }
+                ModifiedMessageVisibility = Visibility.Hidden;
+                return "";
+            }
+        }
+
+        [ObservableProperty]
+        private Visibility modifiedMessageVisibility = Visibility.Hidden;
+
 
         [RelayCommand]
         private async Task BuildTableGrid()
@@ -63,6 +82,19 @@ namespace RestaurantDesktop.ViewModel
                 tables = _jsonService.ExtractTablesFromJson(tablesResponse.Content);
                 BuildTablesForGrid(tables, TableGrid);
             }
+            MessageService.SendLoadingEnd();
+        }
+
+        [RelayCommand]
+        private async Task SaveModifiedTablesPlacement()
+        {
+            MessageService.SendLoadingBegin();
+            foreach (var table in modifiedTables.ToList())
+            {
+                var result = await _tableService.EditTable(_configurationService.GetConfiguration("UserToken"), table, table.Id);
+                modifiedTables.Remove(table);
+            }
+            OnPropertyChanged(nameof(ModifiedTablesMessage));
             MessageService.SendLoadingEnd();
         }
 
@@ -104,7 +136,7 @@ namespace RestaurantDesktop.ViewModel
 
                 tableIcon.MouseLeftButtonDown += TableIcon_MouseLeftButtonDown;
                 grid.PreviewMouseMove += TableGrid_PreviewMouseMove;
-                orgintalTablesIcons.Add(TableService.CopyTableModel(table));
+                orgintalTables.Add(_tableService.CopyTableModel(table));
 
                 grid.Children.Add(tableIcon);
             }
@@ -147,16 +179,26 @@ namespace RestaurantDesktop.ViewModel
                         UpdateTableGridDataContext(droppedTableIcon, newRow, newColumn);
                         if (droppedTableIcon.DataContext is TableWithIdModel model)
                         {
-                            var modifiedTable = orgintalTablesIcons.Where(e => e.Id == model.Id && (e.GridRow != model.GridRow || e.GridColumn != model.GridColumn)).FirstOrDefault();
-                            if (modifiedTable != null)
+                            if (!modifiedTables.Any(e => e.Id == model.Id))
                             {
-                                modifiedTables.Add(modifiedTable);
-                                return;
+                                modifiedTables.Add(model);
+                                OnPropertyChanged(nameof(ModifiedTablesMessage));
                             }
-                            var existingModified = modifiedTables.Where(e => e.Id == model.Id && (e.GridRow == model.GridRow && e.GridColumn == model.GridColumn)).FirstOrDefault();
-                            if (existingModified != null)
+                            else
                             {
-                                modifiedTables.Remove(existingModified);
+                                var mTable = modifiedTables.Where(e => e.Id == model.Id).FirstOrDefault();
+                                if (mTable != null)
+                                {
+                                    var orgTable = orgintalTables.Where(e => e.Id == model.Id).FirstOrDefault();
+                                    if (orgTable != null)
+                                    {
+                                        if (mTable.Id == orgTable.Id && mTable.GridRow == orgTable.GridRow && mTable.GridColumn == orgTable.GridColumn)
+                                        {
+                                            modifiedTables.Remove(mTable);
+                                        }
+                                    }
+                                    OnPropertyChanged(nameof(ModifiedTablesMessage));
+                                }
                             }
                         }
                     }
