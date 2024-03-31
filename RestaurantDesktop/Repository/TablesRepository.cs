@@ -28,7 +28,7 @@ namespace RestaurantDesktop.Repository
             return client.Execute(request);
         }
 
-        public RestResponse EditTable(string userToken, string json, string tableIdToEdit)
+        public Task<RestResponse> EditTable(string userToken, string json, string tableIdToEdit)
         {
             var options = new RestClientOptions(Connection.ApiAddress);
             var client = new RestClient(options);
@@ -37,7 +37,7 @@ namespace RestaurantDesktop.Repository
 
             request.AddHeader("Authorization", $"Bearer {userToken}");
 
-            return client.Execute(request);
+            return client.ExecuteAsync(request);
         }
 
         public async Task<RestResponse> DeleteTable(string userToken, string tableIdToDelete)

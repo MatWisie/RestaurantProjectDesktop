@@ -23,10 +23,10 @@ namespace RestaurantDesktop.Service
             return _tablesRepository.AddTable(userToken, json);
         }
 
-        public RestResponse EditTable(string userToken, TableModel tableEditModel, string tableIdToEdit)
+        public async Task<RestResponse> EditTable(string userToken, TableModel tableEditModel, string tableIdToEdit)
         {
             string json = JsonSerializer.Serialize(tableEditModel);
-            return _tablesRepository.EditTable(userToken, json, tableIdToEdit);
+            return await _tablesRepository.EditTable(userToken, json, tableIdToEdit);
         }
 
         public async Task<RestResponse> DeleteTable(string userToken, string tableIdToDelete)
@@ -34,7 +34,7 @@ namespace RestaurantDesktop.Service
             return await _tablesRepository.DeleteTable(userToken, tableIdToDelete);
         }
 
-        public static TableWithIdModel CopyTableModel(TableWithIdModel model)
+        public TableWithIdModel CopyTableModel(TableWithIdModel model)
         {
             return new TableWithIdModel()
             {

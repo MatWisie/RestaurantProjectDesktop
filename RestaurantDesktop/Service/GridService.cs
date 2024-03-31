@@ -60,8 +60,8 @@ namespace RestaurantDesktop.Service
             {
                 Kind = PackIconBoxIconsKind.RegularChair,
                 DataContext = table,
-                Width = 30,
-                Height = 30,
+                Width = 35,
+                Height = 35,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch,
                 VerticalAlignment = System.Windows.VerticalAlignment.Stretch
             };
