@@ -21,8 +21,18 @@
                 <mahIcons:Modern Kind="LayoutSidebar" Height="100" Width="100" RotationAngle="120"/>
             </ContentControl>
         </Grid>
-
-        <ContentControl Content="{Binding TableGrid}" Margin="40"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <ContentControl Content="{Binding TableGrid}" Margin="40"/>
+            <Grid Grid.Row="1" Visibility="{Binding ModifiedMessageVisibility}">
+                <Rectangle Fill="DarkSlateBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <TextBlock Foreground="White" FontSize="22" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding ModifiedTablesMessage}"/>
+                <Button Content="Save" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding SaveModifiedTablesPlacementCommand}"/>
+            </Grid>
+        </Grid>
 
         <Border Grid.Column="1" Background="#4887b5" BorderBrush="Blue">
             <Grid>
