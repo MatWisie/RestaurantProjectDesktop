@@ -110,6 +110,13 @@ namespace RestaurantDesktop.ViewModel
             MessageService.SendChangeViewMessage(App.Current.Services.GetService<MainMenuViewModel>());
         }
 
+        [RelayCommand]
+        private void GoToEditTable()
+        {
+            if (SelectedTable != null)
+                MessageService.SendChangeViewMessage(new EditTableViewModel(SelectedTable, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<ITableService>()));
+        }
+
         private void BuildRectanglesForGrid(Grid grid)
         {
             for (int i = 0; i < grid.RowDefinitions.Count; i++)
