@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RestaurantDesktop.View"
+             xmlns:conv="clr-namespace:RestaurantDesktop.Converter"
              mc:Ignorable="d" 
              d:Background="White"
              xmlns:mahIcons="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -11,6 +12,9 @@
              xmlns:vm="clr-namespace:RestaurantDesktop.ViewModel"
              d:DataContext="{d:DesignInstance Type=vm:TablesViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <conv:NullToVisibilityConverter x:Key="NullToVisibilityConv"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -26,14 +30,30 @@
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
             <ContentControl Content="{Binding TableGrid}" Margin="40"/>
-            <Grid Grid.Row="1" Visibility="{Binding ModifiedMessageVisibility}">
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Background="#4887b5" Visibility="{Binding SelectedTable, Converter={StaticResource NullToVisibilityConv}}">
+                <GroupBox Grid.Row="2" Header="Selected table" Foreground="White" BorderBrush="White">
+                    <StackPanel>
+                        <TextBlock Text="{Binding SelectedTable.Id, StringFormat=Id:{0}}"/>
+                        <TextBlock Text="{Binding SelectedTable.IsAvailable, StringFormat=Available:{0}}"/>
+                        <TextBlock Text="{Binding SelectedTable.NumberOfSeats, StringFormat=Number of seats:{0}}"/>
+                        <TextBlock Text="{Binding SelectedTable.GridRow, StringFormat=Grid row:{0}}"/>
+                        <TextBlock Text="{Binding SelectedTable.GridColumn, StringFormat=Grid column:{0}}"/>
+                    </StackPanel>
+                </GroupBox>
+                <Button Content="Edit" Command="{Binding GoToEditTableCommand}"/>
+                <Button Content="Delete" Command="{Binding DeleteTableCommand}"/>
+            </StackPanel>
+            <Grid Grid.Row="1" Visibility="{Binding ModifiedMessageVisibility}" Grid.ColumnSpan="2">
                 <Rectangle Fill="DarkSlateBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 <TextBlock Foreground="White" FontSize="22" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding ModifiedTablesMessage}"/>
                 <Button Content="Save" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding SaveModifiedTablesPlacementCommand}"/>
             </Grid>
         </Grid>
-
         <Border Grid.Column="1" Background="#4887b5" BorderBrush="Blue">
             <Grid>
                 <Grid.RowDefinitions>
