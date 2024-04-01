@@ -142,6 +142,24 @@ namespace RestaurantDesktop.ViewModel
             }
         }
 
+        private void TableIcon_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is PackIconBoxIcons icon)
+            {
+                var tables = TableGrid.Children.OfType<PackIconBoxIcons>();
+                foreach (var t in tables)
+                {
+                    t.Background = new SolidColorBrush(Colors.White);
+                }
+
+                icon.Background = new SolidColorBrush(Colors.LightBlue);
+                if (icon.DataContext is TableWithIdModel table)
+                {
+                    SelectedTable = table;
+                }
+            }
+        }
+
         private void UpdateTableGridDataContext(PackIconBoxIcons droppedTableIcon, int gridRow, int gridColumn)
         {
             if (droppedTableIcon.DataContext is TableWithIdModel tableWithIdModel)
