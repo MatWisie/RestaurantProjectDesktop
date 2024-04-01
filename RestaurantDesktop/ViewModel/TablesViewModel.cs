@@ -39,12 +39,14 @@ namespace RestaurantDesktop.ViewModel
         private Grid tableGrid;
 
         [ObservableProperty]
-        private PackIconControlBase selectedTable;
+        private TableWithIdModel? selectedTable;
 
         private TableGridModel tableGridModel;
         private List<TableWithIdModel> tables;
         private List<TableWithIdModel> orgintalTables;
         private List<TableWithIdModel> modifiedTables;
+
+
 
         public string ModifiedTablesMessage
         {
@@ -99,9 +101,42 @@ namespace RestaurantDesktop.ViewModel
         }
 
         [RelayCommand]
+        private async Task DeleteTable()
+        {
+            if (MessageBox.Show("Are you sure you want to delete this table?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                MessageService.SendLoadingBegin();
+                var tablesResponse = await _tableService.DeleteTable(_configurationService.GetConfiguration("UserToken"), SelectedTable.Id);
+                if (tablesResponse.IsSuccessful)
+                {
+                    var tableToDelete = tables.FirstOrDefault(e => e.Id == SelectedTable.Id);
+                    if (tableToDelete != null)
+                        tables.Remove(tableToDelete);
+                    var orgTableToDelete = orgintalTables.FirstOrDefault(e => e.Id == SelectedTable.Id);
+                    if (orgTableToDelete != null)
+                        orgintalTables.Remove(orgTableToDelete);
+                    var modTableToDelete = modifiedTables.FirstOrDefault(e => e.Id == SelectedTable.Id);
+                    if (modTableToDelete != null)
+                    {
+                        modifiedTables.Remove(modTableToDelete);
+                        OnPropertyChanged(nameof(ModifiedTablesMessage));
+                    }
+                    var tableInGrid = TableGrid.Children.OfType<PackIconBoxIcons>().Where(e => e.DataContext is TableWithIdModel && ((TableWithIdModel)e.DataContext).Id == SelectedTable.Id).FirstOrDefault();
+                    if (tableInGrid != null && tableInGrid.DataContext is TableWithIdModel model)
+                    {
+                        TableGrid.Children.Remove(tableInGrid);
+                        SelectedTable = null;
+                    }
+                }
+                _authService.CheckIfLogout(tablesResponse.StatusCode);
+                MessageService.SendLoadingEnd();
+            }
+        }
+
+        [RelayCommand]
         private void GoToAddTable()
         {
-            MessageService.SendChangeViewMessage(new AddTableViewModel(tableGridModel, tables, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<ITableService>())); //App.Current.Services.GetService<AddTableViewModel>());
+            MessageService.SendChangeViewMessage(new AddTableViewModel(tableGridModel, tables, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<ITableService>()));
         }
 
         [RelayCommand]
@@ -141,6 +176,7 @@ namespace RestaurantDesktop.ViewModel
                 Grid.SetRow(tableIcon, table.GridRow);
                 Grid.SetColumn(tableIcon, table.GridColumn);
 
+                tableIcon.MouseDown += TableIcon_MouseDown;
                 tableIcon.MouseLeftButtonDown += TableIcon_MouseLeftButtonDown;
                 grid.PreviewMouseMove += TableGrid_PreviewMouseMove;
                 orgintalTables.Add(_tableService.CopyTableModel(table));
@@ -208,6 +244,7 @@ namespace RestaurantDesktop.ViewModel
                             {
                                 modifiedTables.Add(model);
                                 OnPropertyChanged(nameof(ModifiedTablesMessage));
+                                OnPropertyChanged(nameof(SelectedTable));
                             }
                             else
                             {
@@ -223,6 +260,7 @@ namespace RestaurantDesktop.ViewModel
                                         }
                                     }
                                     OnPropertyChanged(nameof(ModifiedTablesMessage));
+                                    OnPropertyChanged(nameof(SelectedTable));
                                 }
                             }
                         }
