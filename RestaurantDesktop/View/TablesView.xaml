@@ -59,6 +59,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Button Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding GoToAddTableCommand}" Background="ForestGreen" Foreground="White">
@@ -71,7 +72,12 @@
                         <mahIcons:Modern Kind="Refresh" Height="30" Width="30"/>
                     </Button.Content>
                 </Button>
-                <Button VerticalAlignment="Bottom" Grid.Row="2" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Stretch" Command="{Binding GoToMainMenuCommand}">
+                <Button Grid.Row="2" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding GoToEditInfrastructureCommand}" Background="BlueViolet">
+                    <Button.Content>
+                        <mahIcons:Modern Kind="Grid"  Height="30" Width="30"/>
+                    </Button.Content>
+                </Button>
+                <Button VerticalAlignment="Bottom" Grid.Row="3" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Stretch" Command="{Binding GoToMainMenuCommand}">
                     <Button.Content>
                         <mahIcons:Modern Kind="ArrowRight" Height="30" Width="30"/>
                     </Button.Content>
