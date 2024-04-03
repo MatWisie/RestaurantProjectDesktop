@@ -7,5 +7,7 @@ namespace RestaurantDesktop.Interface
         string ExtractFromJson(string json, string key);
         List<User> ExtractUsersFromJson(string json);
         List<DishWithIdModel> ExtractDishesFromJson(string json);
+        TableGridModel ExtractTableGridDataFromJson(string json);
+        List<TableWithIdModel> ExtractTablesFromJson(string json);
     }
 }

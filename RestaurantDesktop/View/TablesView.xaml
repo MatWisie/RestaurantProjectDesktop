@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="RestaurantDesktop.View.TablesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RestaurantDesktop.View"
+             xmlns:conv="clr-namespace:RestaurantDesktop.Converter"
+             mc:Ignorable="d" 
+             d:Background="White"
+             xmlns:mahIcons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:vm="clr-namespace:RestaurantDesktop.ViewModel"
+             d:DataContext="{d:DesignInstance Type=vm:TablesViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <conv:NullToVisibilityConverter x:Key="NullToVisibilityConv"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray">
+                <mahIcons:Modern Kind="LayoutSidebar" Height="100" Width="100" RotationAngle="120"/>
+            </ContentControl>
+        </Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <ContentControl Content="{Binding TableGrid}" Margin="40"/>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Background="#4887b5" Visibility="{Binding SelectedTable, Converter={StaticResource NullToVisibilityConv}}">
+                <GroupBox Grid.Row="2" Header="Selected table" Foreground="White" BorderBrush="White">
+                    <StackPanel>
+                        <TextBlock Text="{Binding SelectedTable.Id, StringFormat=Id:{0}}"/>
+                        <TextBlock Text="{Binding SelectedTable.IsAvailable, StringFormat=Available:{0}}"/>
+                        <TextBlock Text="{Binding SelectedTable.NumberOfSeats, StringFormat=Number of seats:{0}}"/>
+                        <TextBlock Text="{Binding SelectedTable.GridRow, StringFormat=Grid row:{0}}"/>
+                        <TextBlock Text="{Binding SelectedTable.GridColumn, StringFormat=Grid column:{0}}"/>
+                    </StackPanel>
+                </GroupBox>
+                <Button Content="Edit" Command="{Binding GoToEditTableCommand}"/>
+                <Button Content="Delete" Command="{Binding DeleteTableCommand}"/>
+            </StackPanel>
+            <Grid Grid.Row="1" Visibility="{Binding ModifiedMessageVisibility}" Grid.ColumnSpan="2">
+                <Rectangle Fill="DarkSlateBlue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <TextBlock Foreground="White" FontSize="22" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding ModifiedTablesMessage}"/>
+                <Button Content="Save" FontSize="22" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding SaveModifiedTablesPlacementCommand}"/>
+            </Grid>
+        </Grid>
+        <Border Grid.Column="1" Background="#4887b5" BorderBrush="Blue">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding GoToAddTableCommand}" Background="ForestGreen" Foreground="White">
+                    <Button.Content>
+                        <mahIcons:Modern Kind="Add" Height="30" Width="30"/>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Row="1" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding BuildTableGridCommand}">
+                    <Button.Content>
+                        <mahIcons:Modern Kind="Refresh" Height="30" Width="30"/>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Row="2" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding GoToEditInfrastructureCommand}" Background="BlueViolet">
+                    <Button.Content>
+                        <mahIcons:Modern Kind="Grid"  Height="30" Width="30"/>
+                    </Button.Content>
+                </Button>
+                <Button VerticalAlignment="Bottom" Grid.Row="3" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Stretch" Command="{Binding GoToMainMenuCommand}">
+                    <Button.Content>
+                        <mahIcons:Modern Kind="ArrowRight" Height="30" Width="30"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

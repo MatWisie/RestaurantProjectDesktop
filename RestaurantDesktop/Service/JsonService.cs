@@ -107,5 +107,62 @@ namespace RestaurantDesktop.Service
 
             return dishes;
         }
+
+        public TableGridModel ExtractTableGridDataFromJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                throw new ArgumentNullException("JSON string cannot be null or empty");
+            }
+
+            JObject jsonGridData = JObject.Parse(json);
+
+            if (jsonGridData == null)
+            {
+                throw new Exception("Failed to parse JSON");
+            }
+
+            TableGridModel gridData = new TableGridModel()
+            {
+                NumberOfRows = jsonGridData["numberOfRows"].Value<int>(),
+                NumberOfColumns = jsonGridData["numberOfColumns"].Value<int>(),
+            };
+
+            return gridData;
+        }
+
+        public List<TableWithIdModel> ExtractTablesFromJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                throw new ArgumentNullException("JSON string cannot be null or empty");
+            }
+
+            JArray jsonArray = JArray.Parse(json);
+
+            if (jsonArray == null)
+            {
+                throw new Exception("Failed to parse JSON");
+            }
+
+            List<TableWithIdModel> tables = new List<TableWithIdModel>();
+
+            foreach (JObject tableObj in jsonArray)
+            {
+                TableWithIdModel table = new TableWithIdModel
+                {
+                    Id = tableObj["id"].ToString(),
+                    IsAvailable = tableObj["isAvailable"].Value<bool>(),
+                    NumberOfSeats = tableObj["numberOfSeats"].Value<int>(),
+                    GridRow = tableObj["gridRow"].Value<int>(),
+                    GridColumn = tableObj["gridColumn"].Value<int>(),
+
+                };
+
+                tables.Add(table);
+            }
+
+            return tables;
+        }
     }
 }
