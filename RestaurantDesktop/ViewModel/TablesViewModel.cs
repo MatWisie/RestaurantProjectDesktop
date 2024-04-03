@@ -152,6 +152,12 @@ namespace RestaurantDesktop.ViewModel
                 MessageService.SendChangeViewMessage(new EditTableViewModel(SelectedTable, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<ITableService>()));
         }
 
+        [RelayCommand]
+        private void GoToEditInfrastructure()
+        {
+            MessageService.SendChangeViewMessage(new EditInfrastructureViewModel(tableGridModel, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<IGridService>()));
+        }
+
         private void BuildRectanglesForGrid(Grid grid)
         {
             for (int i = 0; i < grid.RowDefinitions.Count; i++)
