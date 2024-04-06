@@ -29,7 +29,7 @@
             <mah:Tile Title="Tables" Width="300" Height="300" Background="DarkGreen" Command="{Binding GoToTablesCommand}">
                 <mahIcons:Modern Kind="BorderAll"  Width="200" Height="200"/>
             </mah:Tile>
-            <mah:Tile Title="Orders" Grid.Column="1" Width="300" Height="300" Background="DarkViolet">
+            <mah:Tile Title="Orders" Grid.Column="1" Width="300" Height="300" Background="DarkViolet" Command="{Binding GoToOrdersCommand}">
                 <mahIcons:Modern Kind="ClipboardPaperCheck"  Width="200" Height="200"/>
             </mah:Tile>
             <mah:Tile Title="Dishes" Grid.Column="2" Width="300" Height="300" Background="DarkRed" Command="{Binding GoToDishesCommand}">
