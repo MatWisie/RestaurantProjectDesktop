@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using RestaurantDesktop.Aspect;
 using RestaurantDesktop.Interface;
 using RestaurantDesktop.Model;
 using RestaurantDesktop.Service;
@@ -27,23 +28,22 @@ namespace RestaurantDesktop.ViewModel
         [ObservableProperty]
         private ObservableCollection<DishWithIdModel> loadedDishes;
 
+        [AsyncLoading]
         [RelayCommand]
         private async Task ReloadDishes()
         {
-            MessageService.SendLoadingBegin();
             var dishResponse = await _dishService.GetDishes(_configurationService.GetConfiguration("UserToken"));
             if (dishResponse.IsSuccessful && dishResponse.Content != null)
                 LoadedDishes = new ObservableCollection<DishWithIdModel>(_jsonService.ExtractDishesFromJson(dishResponse.Content));
             _authService.CheckIfLogout(dishResponse.StatusCode);
-            MessageService.SendLoadingEnd();
         }
 
+        [AsyncLoading]
         [RelayCommand]
         private async Task DeleteDish(string dishId)
         {
             if (MessageBox.Show("Are you sure you want to delete this dish?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                MessageService.SendLoadingBegin();
                 var dishResponse = await _dishService.DeleteDish(_configurationService.GetConfiguration("UserToken"), dishId);
                 if (dishResponse.IsSuccessful)
                 {
@@ -51,7 +51,6 @@ namespace RestaurantDesktop.ViewModel
                     LoadedDishes.Remove(dishToDelete);
                 }
                 _authService.CheckIfLogout(dishResponse.StatusCode);
-                MessageService.SendLoadingEnd();
             }
         }
 

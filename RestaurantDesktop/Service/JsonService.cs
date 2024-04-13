@@ -164,5 +164,61 @@ namespace RestaurantDesktop.Service
 
             return tables;
         }
+
+        public List<OrderWithId> ExtractOrdersFromJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                throw new ArgumentNullException("JSON string cannot be null or empty");
+            }
+
+            JArray jsonArray = JArray.Parse(json);
+
+            if (jsonArray == null)
+            {
+                throw new Exception("Failed to parse JSON");
+            }
+
+            List<OrderWithId> orders = new List<OrderWithId>();
+
+            foreach (JObject orderObj in jsonArray)
+            {
+                OrderWithId order = new OrderWithId
+                {
+                    Id = orderObj["id"].Value<int>(),
+                    Status = (StatusEnum)orderObj["status"].Value<int>(),
+                    Price = orderObj["price"].Value<double>(),
+                    Dishes = GetDishes(orderObj["dishModels"] as JArray),
+                    TableId = orderObj["tableModelId"].Value<int>(),
+                    UserId = orderObj["identityUserId"].ToString(),
+
+                };
+
+                orders.Add(order);
+            }
+
+            return orders;
+        }
+
+        private List<DishWithIdModel> GetDishes(JArray dishes)
+        {
+            List<DishWithIdModel> dishesList = new List<DishWithIdModel>();
+
+            foreach (JObject dishObj in dishes)
+            {
+                var dish = new DishWithIdModel
+                {
+                    id = dishObj["id"].ToString(),
+                    name = dishObj["name"].ToString(),
+                    description = dishObj["description"].ToString(),
+                    availability = dishObj["availability"].Value<bool>(),
+                    price = dishObj["price"].Value<double>()
+                };
+
+                dishesList.Add(dish);
+            }
+            return dishesList;
+        }
+
     }
 }
