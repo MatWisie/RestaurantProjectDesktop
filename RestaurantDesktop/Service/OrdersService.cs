@@ -27,5 +27,9 @@ namespace RestaurantDesktop.Service
             return await _ordersRepository.ChangeStatusPaid(userToken, orderId);
         }
 
+        public async Task<RestResponse> DeleteOrder(string userToken, int orderId)
+        {
+            return await _ordersRepository.DeleteOrder(userToken, orderId);
+        }
     }
 }

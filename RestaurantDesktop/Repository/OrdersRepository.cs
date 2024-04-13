@@ -38,5 +38,15 @@ namespace RestaurantDesktop.Repository
             return await client.ExecuteAsync(request);
         }
 
+        public async Task<RestResponse> DeleteOrder(string userToken, int orderId)
+        {
+            var options = new RestClientOptions(Connection.ApiAddress);
+            var client = new RestClient(options);
+            var request = new RestRequest($"/api/Order/{orderId}", Method.Delete);
+
+            request.AddHeader("Authorization", $"Bearer {userToken}");
+
+            return await client.ExecuteAsync(request);
+        }
     }
 }
