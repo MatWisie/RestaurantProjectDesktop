@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using MahApps.Metro.IconPacks;
 using Microsoft.Extensions.DependencyInjection;
+using RestaurantDesktop.Aspect;
 using RestaurantDesktop.Interface;
 using RestaurantDesktop.Model;
 using RestaurantDesktop.Service;
@@ -46,8 +47,6 @@ namespace RestaurantDesktop.ViewModel
         private List<TableWithIdModel> orgintalTables;
         private List<TableWithIdModel> modifiedTables;
 
-
-
         public string ModifiedTablesMessage
         {
             get
@@ -65,11 +64,10 @@ namespace RestaurantDesktop.ViewModel
         [ObservableProperty]
         private Visibility modifiedMessageVisibility = Visibility.Hidden;
 
-
+        [AsyncLoading]
         [RelayCommand]
         private async Task BuildTableGrid()
         {
-            MessageService.SendLoadingBegin();
             var dishResponse = await _gridService.GetGrid(_configurationService.GetConfiguration("UserToken"));
             var tablesResponse = await _tableService.GetTables(_configurationService.GetConfiguration("UserToken"));
 
@@ -78,34 +76,55 @@ namespace RestaurantDesktop.ViewModel
 
             if (dishResponse.IsSuccessful && dishResponse.Content != null && tablesResponse.IsSuccessful && tablesResponse.Content != null)
             {
+                orgintalTables.Clear();
+                modifiedTables.Clear();
+
                 tableGridModel = _jsonService.ExtractTableGridDataFromJson(dishResponse.Content);
-                TableGrid = _gridService.BuildGrid(tableGridModel);
-                BuildRectanglesForGrid(TableGrid);
                 tables = _jsonService.ExtractTablesFromJson(tablesResponse.Content);
-                BuildTablesForGrid(tables, TableGrid);
+                TableGrid = _gridService.BuildGrid(tableGridModel, tables);
+                SubscribeToDragDropEvents();
             }
-            MessageService.SendLoadingEnd();
         }
 
+        private void SubscribeToDragDropEvents()
+        {
+            TableGrid.PreviewMouseDown += TableGrid_PreviewMouseMove;
+            foreach (var item in TableGrid.Children)
+            {
+                if (item is Rectangle rectangle)
+                {
+                    rectangle.Drop += Rectangle_Drop;
+                }
+                else if (item is PackIconBoxIcons tableIcon)
+                {
+                    tableIcon.MouseDown += TableIcon_MouseDown;
+                    tableIcon.MouseLeftButtonDown += TableIcon_MouseLeftButtonDown;
+                    if (tableIcon.DataContext is TableWithIdModel table)
+                    {
+                        orgintalTables.Add(_tableService.CopyTableModel(table));
+                    }
+                }
+            }
+        }
+
+        [AsyncLoading]
         [RelayCommand]
         private async Task SaveModifiedTablesPlacement()
         {
-            MessageService.SendLoadingBegin();
             foreach (var table in modifiedTables.ToList())
             {
                 var result = await _tableService.EditTable(_configurationService.GetConfiguration("UserToken"), table, table.Id);
                 modifiedTables.Remove(table);
             }
             OnPropertyChanged(nameof(ModifiedTablesMessage));
-            MessageService.SendLoadingEnd();
         }
 
+        [AsyncLoading]
         [RelayCommand]
         private async Task DeleteTable()
         {
             if (MessageBox.Show("Are you sure you want to delete this table?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                MessageService.SendLoadingBegin();
                 var tablesResponse = await _tableService.DeleteTable(_configurationService.GetConfiguration("UserToken"), SelectedTable.Id);
                 if (tablesResponse.IsSuccessful)
                 {
@@ -129,65 +148,6 @@ namespace RestaurantDesktop.ViewModel
                     }
                 }
                 _authService.CheckIfLogout(tablesResponse.StatusCode);
-                MessageService.SendLoadingEnd();
-            }
-        }
-
-        [RelayCommand]
-        private void GoToAddTable()
-        {
-            MessageService.SendChangeViewMessage(new AddTableViewModel(tableGridModel, tables, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<ITableService>()));
-        }
-
-        [RelayCommand]
-        private void GoToMainMenu()
-        {
-            MessageService.SendChangeViewMessage(App.Current.Services.GetService<MainMenuViewModel>());
-        }
-
-        [RelayCommand]
-        private void GoToEditTable()
-        {
-            if (SelectedTable != null)
-                MessageService.SendChangeViewMessage(new EditTableViewModel(SelectedTable, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<ITableService>()));
-        }
-
-        [RelayCommand]
-        private void GoToEditInfrastructure()
-        {
-            MessageService.SendChangeViewMessage(new EditInfrastructureViewModel(tableGridModel, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<IGridService>()));
-        }
-
-        private void BuildRectanglesForGrid(Grid grid)
-        {
-            for (int i = 0; i < grid.RowDefinitions.Count; i++)
-            {
-                for (int j = 0; j < grid.ColumnDefinitions.Count; j++)
-                {
-                    Rectangle rectangle = _gridService.BuildDropRectangle();
-                    Grid.SetRow(rectangle, i);
-                    Grid.SetColumn(rectangle, j);
-                    rectangle.Drop += Rectangle_Drop;
-                    grid.Children.Add(rectangle);
-                }
-            }
-        }
-
-        private void BuildTablesForGrid(List<TableWithIdModel> tables, Grid grid)
-        {
-            foreach (var table in tables)
-            {
-                var tableIcon = _gridService.BuildPackIcon(table);
-
-                Grid.SetRow(tableIcon, table.GridRow);
-                Grid.SetColumn(tableIcon, table.GridColumn);
-
-                tableIcon.MouseDown += TableIcon_MouseDown;
-                tableIcon.MouseLeftButtonDown += TableIcon_MouseLeftButtonDown;
-                grid.PreviewMouseMove += TableGrid_PreviewMouseMove;
-                orgintalTables.Add(_tableService.CopyTableModel(table));
-
-                grid.Children.Add(tableIcon);
             }
         }
 
@@ -293,6 +253,31 @@ namespace RestaurantDesktop.ViewModel
             {
                 DragDrop.DoDragDrop(tableIcon, tableIcon, DragDropEffects.Move);
             }
+        }
+
+        [RelayCommand]
+        private void GoToMainMenu()
+        {
+            MessageService.SendChangeViewMessage(App.Current.Services.GetService<MainMenuViewModel>());
+        }
+
+        [RelayCommand]
+        private void GoToEditTable()
+        {
+            if (SelectedTable != null)
+                MessageService.SendChangeViewMessage(new EditTableViewModel(SelectedTable, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<ITableService>()));
+        }
+
+        [RelayCommand]
+        private void GoToEditInfrastructure()
+        {
+            MessageService.SendChangeViewMessage(new EditInfrastructureViewModel(tableGridModel, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<IGridService>()));
+        }
+
+        [RelayCommand]
+        private void GoToAddTable()
+        {
+            MessageService.SendChangeViewMessage(new AddTableViewModel(tableGridModel, tables, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<ITableService>()));
         }
     }
 }

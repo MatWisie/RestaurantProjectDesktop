@@ -27,7 +27,7 @@ namespace RestaurantDesktop.Service
             return _gridRepository.EditGrid(userToken, json);
         }
 
-        public Grid BuildGrid(TableGridModel gridData)
+        public Grid BuildGrid(TableGridModel gridData, List<TableWithIdModel> tables)
         {
             Grid tmpGrid = new Grid();
             for (int i = 0; i < gridData.NumberOfRows; i++)
@@ -41,6 +41,28 @@ namespace RestaurantDesktop.Service
             }
 
             tmpGrid.ShowGridLines = true;
+
+
+            for (int i = 0; i < tmpGrid.RowDefinitions.Count; i++)
+            {
+                for (int j = 0; j < tmpGrid.ColumnDefinitions.Count; j++)
+                {
+                    Rectangle rectangle = BuildDropRectangle();
+                    SetElementOnGrid(rectangle, tmpGrid, i, j);
+                    tmpGrid.Children.Add(rectangle);
+                }
+            }
+
+            foreach (var table in tables)
+            {
+                var tableIcon = BuildPackIcon(table);
+
+                SetElementOnGrid(tableIcon, tmpGrid, table.GridRow, table.GridColumn);
+
+                tmpGrid.Children.Add(tableIcon);
+            }
+
+
             return tmpGrid;
         }
 
@@ -66,6 +88,17 @@ namespace RestaurantDesktop.Service
                 VerticalAlignment = System.Windows.VerticalAlignment.Stretch
             };
             return tableIcon;
+        }
+
+        public bool SetElementOnGrid(FrameworkElement element, Grid grid, int row, int column)
+        {
+            if (column < grid.ColumnDefinitions.Count && row < grid.RowDefinitions.Count)
+            {
+                Grid.SetRow(element, row);
+                Grid.SetColumn(element, column);
+                return true;
+            }
+            return false;
         }
     }
 }
