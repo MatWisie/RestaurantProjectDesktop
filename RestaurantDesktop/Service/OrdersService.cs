@@ -16,5 +16,16 @@ namespace RestaurantDesktop.Service
         {
             return await _ordersRepository.GetOrders(userToken);
         }
+
+        public async Task<RestResponse> ChangeStatusReady(string userToken, int orderId)
+        {
+            return await _ordersRepository.ChangeStatusReady(userToken, orderId);
+        }
+
+        public async Task<RestResponse> ChangeStatusPaid(string userToken, int orderId)
+        {
+            return await _ordersRepository.ChangeStatusPaid(userToken, orderId);
+        }
+
     }
 }

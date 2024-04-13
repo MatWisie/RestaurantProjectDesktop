@@ -1,8 +1,11 @@
-﻿namespace RestaurantDesktop.Model
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace RestaurantDesktop.Model
 {
-    public class Order
+    public partial class Order : ObservableObject
     {
-        public StatusEnum Status { get; set; }
+        [ObservableProperty]
+        public StatusEnum status;
         public double Price { get; set; }
         public List<DishWithIdModel> Dishes { get; set; }
         public int TableId { get; set; }

@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             x:Name="OrdersUserControl"
              xmlns:local="clr-namespace:RestaurantDesktop.View"
              xmlns:vm="clr-namespace:RestaurantDesktop.ViewModel"
              mc:Ignorable="d" 
@@ -10,7 +11,7 @@
              xmlns:mahIcons="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              d:DataContext="{d:DesignInstance Type=vm:OrdersViewModel}"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="1200">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -27,14 +28,14 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <mah:FlipView FontSize="30" Width="1000" BannerOpacity="0" ItemsSource="{Binding ActiveOrders}" HorizontalAlignment="Center" Background="CornflowerBlue" Foreground="{DynamicResource MahApps.Brushes.ThemeBackground}">
+            <mah:FlipView FontSize="30" SelectedIndex="{Binding FlipViewIndex, Mode=TwoWay}" Width="1000" BannerOpacity="0" ItemsSource="{Binding ActiveOrders}" HorizontalAlignment="Center" Background="CornflowerBlue" Foreground="{DynamicResource MahApps.Brushes.ThemeBackground}">
                 <mah:FlipView.Effect>
                     <DropShadowEffect/>
                 </mah:FlipView.Effect>
                 <mah:FlipView.ItemTemplate>
                     <DataTemplate>
                         <ScrollViewer>
-                            <StackPanel>
+                            <StackPanel Margin="50 0 50 0">
                                 <Border BorderBrush="Blue" Background="DarkBlue" BorderThickness="1" Margin="0 0 0 10">
                                     <TextBlock Text="{Binding Id, StringFormat=🛎️ Order:{0}}"/>
                                 </Border>
@@ -99,9 +100,29 @@
                                 </Expander>
                                 <TextBlock Text="{Binding Price, StringFormat=💵 Price:{0}}" Foreground="DarkRed" FontWeight="Bold" Margin="0 0 0 10"/>
                                 <TextBlock Text="↓ Status"/>
-                                <Border BorderBrush="DarkGreen" BorderThickness="1" Background="ForestGreen">
-                                    <TextBlock Text="{Binding Status}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                                <Button Content="{Binding Status}" Width="140" FontSize="30" Command="{Binding DataContext.ChangeStatusCommand, RelativeSource={RelativeSource AncestorType={x:Type local:OrdersView}}}" CommandParameter="{Binding Path=Id}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Content, RelativeSource={RelativeSource Self}}" Value="Working">
+                                                        <Setter Property="Background" Value="Yellow"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Content, RelativeSource={RelativeSource Self}}" Value="Ready">
+                                                        <Setter Property="Background" Value="DarkGreen"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Content, RelativeSource={RelativeSource Self}}" Value="ReadyToPay">
+                                                        <Setter Property="Background" Value="Orange"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Content, RelativeSource={RelativeSource Self}}" Value="Paid">
+                                                        <Setter Property="Background" Value="Lime"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Button Content="❌" Background="DarkRed" Width="60" FontSize="20" Foreground="White" Command="{Binding DataContext.DeleteOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type local:OrdersView}}}" CommandParameter="{Binding Path=Id}"/>
+                                </StackPanel>
                             </StackPanel>
                         </ScrollViewer>
                     </DataTemplate>
@@ -319,12 +340,7 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Button Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding GoToAddDishCommand}" Background="ForestGreen" Foreground="White">
-                    <Button.Content>
-                        <mahIcons:Modern Kind="Add" Height="30" Width="30"/>
-                    </Button.Content>
-                </Button>
-                <Button Grid.Row="1" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding ReloadDishesCommand}">
+                <Button Grid.Row="1" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding ReloadOrdersCommand}">
                     <Button.Content>
                         <mahIcons:Modern Kind="Refresh" Height="30" Width="30"/>
                     </Button.Content>
