@@ -29,7 +29,7 @@ namespace RestaurantDesktop.ViewModel
             _configurationService = configurationService;
             _authService = authService;
             _jsonService = jsonService;
-            orgintalTables = new List<TableWithIdModel>();
+            tables = new List<TableWithIdModel>();
             modifiedTables = new List<TableWithIdModel>();
 
             BuildTableGrid();
@@ -44,7 +44,6 @@ namespace RestaurantDesktop.ViewModel
 
         private TableGridModel tableGridModel;
         private List<TableWithIdModel> tables;
-        private List<TableWithIdModel> orgintalTables;
         private List<TableWithIdModel> modifiedTables;
 
         public string ModifiedTablesMessage
@@ -76,7 +75,7 @@ namespace RestaurantDesktop.ViewModel
 
             if (dishResponse.IsSuccessful && dishResponse.Content != null && tablesResponse.IsSuccessful && tablesResponse.Content != null)
             {
-                orgintalTables.Clear();
+                tables.Clear();
                 modifiedTables.Clear();
 
                 tableGridModel = _jsonService.ExtractTableGridDataFromJson(dishResponse.Content);
@@ -101,7 +100,7 @@ namespace RestaurantDesktop.ViewModel
                     tableIcon.MouseLeftButtonDown += TableIcon_MouseLeftButtonDown;
                     if (tableIcon.DataContext is TableWithIdModel table)
                     {
-                        orgintalTables.Add(_tableService.CopyTableModel(table));
+                        tables.Add(_tableService.CopyTableModel(table));
                     }
                 }
             }
@@ -131,9 +130,9 @@ namespace RestaurantDesktop.ViewModel
                     var tableToDelete = tables.FirstOrDefault(e => e.Id == SelectedTable.Id);
                     if (tableToDelete != null)
                         tables.Remove(tableToDelete);
-                    var orgTableToDelete = orgintalTables.FirstOrDefault(e => e.Id == SelectedTable.Id);
+                    var orgTableToDelete = tables.FirstOrDefault(e => e.Id == SelectedTable.Id);
                     if (orgTableToDelete != null)
-                        orgintalTables.Remove(orgTableToDelete);
+                        tables.Remove(orgTableToDelete);
                     var modTableToDelete = modifiedTables.FirstOrDefault(e => e.Id == SelectedTable.Id);
                     if (modTableToDelete != null)
                     {
@@ -217,7 +216,7 @@ namespace RestaurantDesktop.ViewModel
                                 var mTable = modifiedTables.Where(e => e.Id == model.Id).FirstOrDefault();
                                 if (mTable != null)
                                 {
-                                    var orgTable = orgintalTables.Where(e => e.Id == model.Id).FirstOrDefault();
+                                    var orgTable = tables.Where(e => e.Id == model.Id).FirstOrDefault();
                                     if (orgTable != null)
                                     {
                                         if (mTable.Id == orgTable.Id && mTable.GridRow == orgTable.GridRow && mTable.GridColumn == orgTable.GridColumn)
