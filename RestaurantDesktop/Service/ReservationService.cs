@@ -18,5 +18,11 @@ namespace RestaurantDesktop.Service
             return await _reservationsRepository.GetReservations(userToken);
         }
 
+        public async Task<RestResponse> EditReservation(string userToken, ReservationEditModel reservationEditModel, string reservationIdToEdit)
+        {
+            string json = JsonSerializer.Serialize(reservationEditModel);
+            return await _reservationsRepository.EditReservation(userToken, json, reservationIdToEdit);
+        }
+
     }
 }
