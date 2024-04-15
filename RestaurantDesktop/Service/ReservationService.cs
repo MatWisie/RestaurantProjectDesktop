@@ -24,5 +24,9 @@ namespace RestaurantDesktop.Service
             return await _reservationsRepository.EditReservation(userToken, json, reservationIdToEdit);
         }
 
+        public async Task<RestResponse> DeleteReservation(string userToken, string reservationIdToDelete)
+        {
+            return await _reservationsRepository.DeleteReservation(userToken, reservationIdToDelete);
+        }
     }
 }
