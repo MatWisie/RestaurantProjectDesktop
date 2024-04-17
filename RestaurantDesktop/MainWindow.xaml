@@ -48,6 +48,12 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:OrdersViewModel}">
             <view:OrdersView />
+        </DataTemplate>       
+        <DataTemplate DataType="{x:Type vm:ReservationsViewModel}">
+            <view:ReservationsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:EditReservationViewModel}">
+            <view:EditReservationView />
         </DataTemplate>
     </Window.Resources>
     <Grid>

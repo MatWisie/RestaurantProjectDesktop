@@ -35,7 +35,7 @@
             <mah:Tile Title="Dishes" Grid.Column="2" Width="300" Height="300" Background="DarkRed" Command="{Binding GoToDishesCommand}">
                 <mahIcons:Modern Kind="Food"  Width="200" Height="200"/>
             </mah:Tile>
-            <mah:Tile Title="Reservations" Grid.Row="1" Width="300" Height="300" Background="DarkKhaki">
+            <mah:Tile Title="Reservations" Grid.Row="1" Width="300" Height="300" Background="DarkKhaki" Command="{Binding GoToReservationsCommand}">
                 <mahIcons:Modern Kind="BookList"  Width="200" Height="200"/>
             </mah:Tile>
             <mah:Tile Title="{Binding UsersTileTitle}" Command="{Binding GoToUserSettingsCommand}" Grid.Column="1" Grid.Row="1" Width="300" Height="300">

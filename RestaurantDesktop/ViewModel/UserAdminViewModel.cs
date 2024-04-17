@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using RestaurantDesktop.Aspect;
 using RestaurantDesktop.Interface;
 using RestaurantDesktop.Model;
 using RestaurantDesktop.Model.Message;
@@ -28,15 +29,14 @@ namespace RestaurantDesktop.ViewModel
         [ObservableProperty]
         private ObservableCollection<User> loadedUsers;
 
+        [AsyncLoading]
         [RelayCommand]
         private async Task ReloadUsers()
         {
-            MessageService.SendLoadingBegin();
             var usersResponse = await _userService.GetUsers(_configurationService.GetConfiguration("UserToken"));
             if (usersResponse.IsSuccessful && usersResponse.Content != null)
                 LoadedUsers = new ObservableCollection<User>(_jsonService.ExtractUsersFromJson(usersResponse.Content));
             _authService.CheckIfLogout(usersResponse.StatusCode);
-            MessageService.SendLoadingEnd();
         }
         [RelayCommand]
         private void GoToAddWorker()
@@ -50,12 +50,12 @@ namespace RestaurantDesktop.ViewModel
             WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(new EditUserViewModel(userToEdit, App.Current.Services.GetService<IUserService>(), App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>())));
         }
 
+        [AsyncLoading]
         [RelayCommand]
         private async Task DeleteUser(string userId)
         {
             if (MessageBox.Show("Are you sure you want to delete this user?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.OK)
             {
-                MessageService.SendLoadingBegin();
                 var userResponse = await _userService.DeleteUser(_configurationService.GetConfiguration("UserToken"), userId);
                 if (userResponse.IsSuccessful)
                 {
@@ -63,7 +63,6 @@ namespace RestaurantDesktop.ViewModel
                     LoadedUsers.Remove(userToDelete);
                 }
                 _authService.CheckIfLogout(userResponse.StatusCode);
-                MessageService.SendLoadingEnd();
             }
         }
 

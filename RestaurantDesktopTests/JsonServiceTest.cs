@@ -36,8 +36,6 @@ namespace RestaurantDesktopTests
         {
             JsonService service = new JsonService();
             string json = "[\r\n    {\r\n        \"id\": 1,\r\n        \"status\": 2,\r\n        \"price\": 2,\r\n        \"tableModelId\": 6,\r\n        \"tableModel\": {\r\n            \"id\": 6,\r\n            \"isAvailable\": true,\r\n            \"numberOfSeats\": 2,\r\n            \"gridRow\": 0,\r\n            \"gridColumn\": 0,\r\n            \"orderModels\": null,\r\n            \"reservations\": null\r\n        },\r\n        \"dishModels\": [\r\n            {\r\n                \"id\": 3,\r\n                \"name\": \"LongDescDish\",\r\n                \"description\": \"jmnawldnalsndalndwlansdlkanwlkdnsalinwdlkasndlwikandsm.,andalikdnalskdnakl\",\r\n                \"price\": 4,\r\n                \"availability\": true,\r\n                \"orders\": null\r\n            }\r\n        ],\r\n        \"identityUserId\": \"774f7b87-d9ff-4efb-8c4c-1f1112efdf3c\",\r\n        \"identityUserModel\": null\r\n    }\r\n]";
-            var result = service.ExtractOrdersFromJson(json);
-
             List<OrderWithId> expectedResult = new List<OrderWithId>()
             {
                 new OrderWithId()
@@ -58,6 +56,8 @@ namespace RestaurantDesktopTests
                     }
                 }
             };
+            var result = service.ExtractOrdersFromJson(json);
+
 
             Assert.AreEqual(expectedResult[0].Dishes[0].id, result[0].Dishes[0].id);
             Assert.AreEqual(expectedResult[0].Dishes[0].name, result[0].Dishes[0].name);
@@ -73,6 +73,33 @@ namespace RestaurantDesktopTests
             string json = "bla";
             var result = service.ExtractOrdersFromJson(json);
 
+        }
+
+        [TestMethod]
+        public void ExtractReservationsFromJson_CorrectOneObjJson_CorrectReservation()
+        {
+            JsonService service = new JsonService();
+            string json = "[\r\n  {\r\n    \"id\": 2,\r\n    \"from\": \"2024-04-17T16:24:29.134Z\",\r\n    \"to\": \"2024-04-17T17:24:29.134Z\",\r\n    \"identityUserId\": \"user\",\r\n    \"tableModelId\": 2\r\n  }\r\n]";
+
+            List<ReservationModel> expectedResult = new List<ReservationModel>()
+            {
+                new ReservationModel()
+                {
+                    Id = "2",
+                    From = new DateTime(2024,4,17,16,24,29,134),
+                    To = new DateTime(2024,4,17,17,24,29,134),
+                    UserId = "user",
+                    TableId = 2
+                }
+            };
+
+            var result = service.ExtractReservationsFromJson(json);
+
+            Assert.AreEqual(expectedResult[0].Id, result[0].Id);
+            Assert.AreEqual(expectedResult[0].From, result[0].From);
+            Assert.AreEqual(expectedResult[0].To, result[0].To);
+            Assert.AreEqual(expectedResult[0].UserId, result[0].UserId);
+            Assert.AreEqual(expectedResult[0].TableId, result[0].TableId);
         }
     }
 }
