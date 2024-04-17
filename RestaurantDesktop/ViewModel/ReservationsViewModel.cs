@@ -39,5 +39,20 @@ namespace RestaurantDesktop.ViewModel
             _authService.CheckIfLogout(reservationResponse.StatusCode);
         }
 
+        [AsyncLoading]
+        [RelayCommand]
+        private async Task DeleteReservation(string reservationId)
+        {
+            if (MessageBox.Show("Are you sure you want to delete this reservation?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                var reservationResponse = await _reservationService.DeleteReservation(_configurationService.GetConfiguration("UserToken"), reservationId);
+                if (reservationResponse.IsSuccessful)
+                {
+                    var reservationToDelete = LoadedReservations.FirstOrDefault(e => e.Id == reservationId);
+                    LoadedReservations.Remove(reservationToDelete);
+                }
+                _authService.CheckIfLogout(reservationResponse.StatusCode);
+            }
+        }
     }
 }
