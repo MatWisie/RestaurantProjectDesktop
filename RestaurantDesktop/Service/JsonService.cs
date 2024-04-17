@@ -200,6 +200,39 @@ namespace RestaurantDesktop.Service
             return orders;
         }
 
+        public List<ReservationModel> ExtractReservationsFromJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                throw new ArgumentNullException("JSON string cannot be null or empty");
+            }
+
+            JArray jsonArray = JArray.Parse(json);
+
+            if (jsonArray == null)
+            {
+                throw new Exception("Failed to parse JSON");
+            }
+
+            List<ReservationModel> reservations = new List<ReservationModel>();
+
+            foreach (JObject tableObj in jsonArray)
+            {
+                ReservationModel reservation = new ReservationModel
+                {
+                    Id = tableObj["id"].ToString(),
+                    From = tableObj["from"].Value<DateTime>(),
+                    To = tableObj["to"].Value<DateTime>(),
+                    UserId = tableObj["identityUserId"].ToString(),
+                    TableId = tableObj["tableModelId"].Value<int>(),
+                };
+
+                reservations.Add(reservation);
+            }
+
+            return reservations;
+        }
+
         private List<DishWithIdModel> GetDishes(JArray dishes)
         {
             List<DishWithIdModel> dishesList = new List<DishWithIdModel>();
