@@ -54,5 +54,11 @@ namespace RestaurantDesktop.ViewModel
                 _authService.CheckIfLogout(reservationResponse.StatusCode);
             }
         }
+        [RelayCommand]
+        private void GoToEditReservation(ReservationModel reservation)
+        {
+            MessageService.SendChangeViewMessage(new EditReservationViewModel(reservation, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<IReservationService>()));
+        }
+
     }
 }
