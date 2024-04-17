@@ -18,31 +18,59 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <ListView ItemsSource="{Binding LoadedUsers}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <Grid ShowGridLines="True">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="300"/>
-                                <ColumnDefinition Width="300"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Background="Aqua" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <mahIcons:Modern Kind="User" Height="30" Width="30"/>
-                            </Grid>
-                            <TextBlock Text="{Binding UserName}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Role}" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Button Content="Edit" Grid.Column="3" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding DataContext.GoToEditCommand, RelativeSource={RelativeSource AncestorType={x:Type local:UsersAdminView}}}" CommandParameter="{Binding}"/>
-                            <Button Content="Delete" Grid.Column="4" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Background="DarkRed" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType={x:Type local:UsersAdminView}}}" CommandParameter="{Binding Id}"/>
-                        </Grid>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+        <ListView ItemsSource="{Binding LoadedUsers}" Margin="0 20 0 0" Background="Transparent">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="200" Header="Id">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Grid Background="LightBlue">
+                                        <mahIcons:Modern Kind="User" Height="30" Width="30"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding Id}" Margin="5 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="UserName" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding UserName}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Role" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Role}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    
+                    <!-- Edit column -->
+                    <GridViewColumn Header="Edit" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Edit" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding DataContext.GoToEditCommand, RelativeSource={RelativeSource AncestorType={x:Type local:UsersAdminView}}}" CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Delete column -->
+                    <GridViewColumn Header="Delete" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Delete" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Background="DarkRed" Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType={x:Type local:UsersAdminView}}}" CommandParameter="{Binding Id}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                </GridView>
+            </ListView.View>
         </ListView>
+
         <Border Grid.Column="1" Background="#4887b5" BorderBrush="Blue">
             <Grid>
                 <Grid.RowDefinitions>
