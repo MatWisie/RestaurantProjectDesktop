@@ -60,5 +60,10 @@ namespace RestaurantDesktop.ViewModel
             MessageService.SendChangeViewMessage(new EditReservationViewModel(reservation, App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>(), App.Current.Services.GetService<IReservationService>()));
         }
 
+        [RelayCommand]
+        private void GoToMainMenu()
+        {
+            MessageService.SendChangeViewMessage(App.Current.Services.GetService<MainMenuViewModel>());
+        }
     }
 }
