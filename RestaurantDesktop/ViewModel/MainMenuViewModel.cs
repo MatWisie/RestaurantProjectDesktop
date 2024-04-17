@@ -57,5 +57,13 @@ namespace RestaurantDesktop.ViewModel
             if (role == "Admin" || role == "Worker")
                 WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<OrdersViewModel>()));
         }
+
+        [RelayCommand]
+        private void GoToReservations()
+        {
+            string role = _configurationService.GetConfiguration("UserRole");
+            if (role == "Admin" || role == "Worker")
+                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<ReservationsViewModel>()));
+        }
     }
 }
