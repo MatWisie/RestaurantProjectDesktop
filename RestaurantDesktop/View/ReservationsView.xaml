@@ -1,0 +1,115 @@
+﻿<UserControl x:Class="RestaurantDesktop.View.ReservationsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RestaurantDesktop.View"
+             xmlns:vm="clr-namespace:RestaurantDesktop.ViewModel"
+             mc:Ignorable="d" 
+             d:Background="White"
+             xmlns:mahIcons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             d:DataContext="{d:DesignInstance Type=vm:ReservationsViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray">
+                <mahIcons:Modern Kind="Clock" Height="100" Width="100" RotationAngle="45"/>
+            </ContentControl>
+        </Grid>
+
+        <ListView ItemsSource="{Binding LoadedReservations}" Margin="0 20 0 0" Background="Transparent">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="200" Header="Id">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Grid Background="LightBlue">
+                                        <mahIcons:Modern Kind="Clock" Height="30" Width="30"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding Id}" Margin="5 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="User" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding UserId}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="From" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding From, StringFormat='{}{0:dd.MM.yyyy HH:mm:ss}'}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="To" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding To, StringFormat='{}{0:dd.MM.yyyy HH:mm:ss}'}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Table" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding TableId}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Edit column -->
+                    <GridViewColumn Header="Edit" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Edit" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding DataContext.GoToEditReservationCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ReservationsView}}}" CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Delete column -->
+                    <GridViewColumn Header="Delete" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Delete" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Background="DarkRed" Command="{Binding DataContext.DeleteReservationCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ReservationsView}}}" CommandParameter="{Binding Id}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+
+        <Border Grid.Column="1" Background="#4887b5" BorderBrush="Blue">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="1" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" Command="{Binding ReloadReservationsCommand}">
+                    <Button.Content>
+                        <mahIcons:Modern Kind="Refresh" Height="30" Width="30"/>
+                    </Button.Content>
+                </Button>
+                <Button VerticalAlignment="Bottom" Grid.Row="2" Style="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}" HorizontalAlignment="Stretch" Command="{Binding GoToMainMenuCommand}">
+                    <Button.Content>
+                        <mahIcons:Modern Kind="ArrowRight" Height="30" Width="30"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
