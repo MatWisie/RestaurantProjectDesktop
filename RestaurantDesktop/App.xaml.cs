@@ -50,6 +50,8 @@ namespace RestaurantDesktop
             services.AddTransient<TablesViewModel>();
             services.AddTransient<AddTableViewModel>();
             services.AddTransient<OrdersViewModel>();
+            services.AddTransient<ReservationsViewModel>();
+            services.AddTransient<EditReservationViewModel>();
 
             return services.BuildServiceProvider();
         }
