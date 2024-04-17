@@ -29,5 +29,15 @@ namespace RestaurantDesktop.ViewModel
         [ObservableProperty]
         private ObservableCollection<ReservationModel> loadedReservations;
 
+        [AsyncLoading]
+        [RelayCommand]
+        private async Task ReloadReservations()
+        {
+            var reservationResponse = await _reservationService.GetReservations(_configurationService.GetConfiguration("UserToken"));
+            if (reservationResponse.IsSuccessful && reservationResponse.Content != null)
+                LoadedReservations = new ObservableCollection<ReservationModel>(_jsonService.ExtractReservationsFromJson(reservationResponse.Content));
+            _authService.CheckIfLogout(reservationResponse.StatusCode);
+        }
+
     }
 }
