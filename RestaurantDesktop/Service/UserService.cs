@@ -39,5 +39,10 @@ namespace RestaurantDesktop.Service
             return _usersRepository.GetUser(userToken, userId);
         }
 
+        public RestResponse ChangeUserPassword(string userToken, UserChangePasswordModel userChangePasswordModel)
+        {
+            string json = JsonSerializer.Serialize(userChangePasswordModel);
+            return _usersRepository.ChangeUserPassword(userToken, json);
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace RestaurantDesktop.Interface
         RestResponse EditUser(string userToken, UserEditModel userEditModel);
         Task<RestResponse> DeleteUser(string userToken, string userIdToDelete);
         RestResponse GetUser(string userToken, string userId);
+        RestResponse ChangeUserPassword(string userToken, UserChangePasswordModel userChangePasswordModel);
     }
 }
