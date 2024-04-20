@@ -63,5 +63,16 @@ namespace RestaurantDesktop.Repository
             return client.Execute(request);
         }
 
+        public RestResponse ChangeUserPassword(string userToken, string json)
+        {
+            var options = new RestClientOptions(Connection.ApiAddress);
+            var client = new RestClient(options);
+            var request = new RestRequest("/change-user-password", Method.Post);
+            request.AddJsonBody(json);
+
+            request.AddHeader("Authorization", $"Bearer {userToken}");
+
+            return client.Execute(request);
+        }
     }
 }
