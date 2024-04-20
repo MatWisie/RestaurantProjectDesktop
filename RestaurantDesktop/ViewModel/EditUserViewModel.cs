@@ -123,6 +123,8 @@ namespace RestaurantDesktop.ViewModel
             string role = _configurationService.GetConfiguration("UserRole");
             if (role == "Admin")
                 WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<UserAdminViewModel>()));
+            else
+                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<MainMenuViewModel>()));
         }
     }
 }
