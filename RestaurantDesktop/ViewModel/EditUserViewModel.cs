@@ -56,9 +56,8 @@ namespace RestaurantDesktop.ViewModel
             UserEditModel userEditModel = new UserEditModel()
             {
                 Id = _userIdToEdit,
-                UserName = UserName,
+                Username = UserName,
                 Password = Password,
-                Email = Email,
                 Age = Age,
             };
             var result = _userService.EditUser(token, userEditModel);
