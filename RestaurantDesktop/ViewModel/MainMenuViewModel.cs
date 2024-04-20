@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using RestaurantDesktop.Interface;
+using RestaurantDesktop.Model;
 using RestaurantDesktop.Model.Message;
 
 namespace RestaurantDesktop.ViewModel
@@ -10,7 +11,9 @@ namespace RestaurantDesktop.ViewModel
     public partial class MainMenuViewModel : ObservableObject
     {
         private readonly IConfigurationService _configurationService;
-        public MainMenuViewModel(IConfigurationService configurationService)
+        private readonly IUserService _userService;
+        private readonly IJsonService _jsonService;
+        public MainMenuViewModel(IConfigurationService configurationService, IUserService userService, IJsonService jsonService)
         {
             _configurationService = configurationService;
             string userRole = _configurationService.GetConfiguration("UserRole");
@@ -18,6 +21,8 @@ namespace RestaurantDesktop.ViewModel
             {
                 WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<UserAdminViewModel>()));
             }
+            _userService = userService;
+            _jsonService = jsonService;
 
             if (userRole == "Admin")
                 UsersTileTitle = "Users settings";
@@ -33,6 +38,20 @@ namespace RestaurantDesktop.ViewModel
         {
             if (_configurationService.GetConfiguration("UserRole") == "Admin")
                 WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<UserAdminViewModel>()));
+            else
+            {
+                var userResponse = _userService.GetUser(_configurationService.GetConfiguration("UserToken"), _configurationService.GetConfiguration("UserId"));
+                if (userResponse.IsSuccessful)
+                {
+                    var user = new User()
+                    {
+                        Id = (string)_jsonService.ExtractFromJson(userResponse.Content, "id"),
+                        UserName = (string)_jsonService.ExtractFromJson(userResponse.Content, "userName"),
+                        Role = (string)_jsonService.ExtractFromJson(userResponse.Content, "role")
+                    };
+                    WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(new EditUserViewModel(user, App.Current.Services.GetService<IUserService>(), App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>())));
+                }
+            }
         }
 
         [RelayCommand]
