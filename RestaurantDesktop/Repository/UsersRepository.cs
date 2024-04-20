@@ -51,5 +51,17 @@ namespace RestaurantDesktop.Repository
 
             return await client.ExecuteAsync(request);
         }
+
+        public RestResponse GetUser(string userToken, string userId)
+        {
+            var options = new RestClientOptions(Connection.ApiAddress);
+            var client = new RestClient(options);
+            var request = new RestRequest($"/get-user/{userId}", Method.Get);
+
+            request.AddHeader("Authorization", $"Bearer {userToken}");
+
+            return client.Execute(request);
+        }
+
     }
 }
