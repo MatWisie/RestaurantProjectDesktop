@@ -54,7 +54,7 @@ namespace RestaurantDesktop.ViewModel
         [RelayCommand]
         private async Task DeleteUser(string userId)
         {
-            if (MessageBox.Show("Are you sure you want to delete this user?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.OK)
+            if (MessageBox.Show("Are you sure you want to delete this user?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 var userResponse = await _userService.DeleteUser(_configurationService.GetConfiguration("UserToken"), userId);
                 if (userResponse.IsSuccessful)
