@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RestaurantDesktop.Interface;
 using RestaurantDesktop.Model;
 using RestaurantDesktop.Model.Message;
+using System.Windows;
 
 namespace RestaurantDesktop.ViewModel
 {
@@ -35,6 +36,7 @@ namespace RestaurantDesktop.ViewModel
 
         [ObservableProperty]
         private Visibility adminTabsVisibility = Visibility.Hidden;
+
         [ObservableProperty]
         private string usersTileTitle;
 
@@ -57,6 +59,14 @@ namespace RestaurantDesktop.ViewModel
                     WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(new EditUserViewModel(user, App.Current.Services.GetService<IUserService>(), App.Current.Services.GetService<IConfigurationService>(), App.Current.Services.GetService<IAuthService>())));
                 }
             }
+        }
+
+        [RelayCommand]
+        private void GoToLogs()
+        {
+            string role = _configurationService.GetConfiguration("UserRole");
+            if (role == "Admin")
+                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<SecurityLogsViewModel>()));
         }
 
         [RelayCommand]
