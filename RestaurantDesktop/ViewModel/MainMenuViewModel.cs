@@ -25,11 +25,16 @@ namespace RestaurantDesktop.ViewModel
             _jsonService = jsonService;
 
             if (userRole == "Admin")
+            {
                 UsersTileTitle = "Users settings";
+                adminTabsVisibility = Visibility.Visible;
+            }
             else
                 UsersTileTitle = "Account settings";
         }
 
+        [ObservableProperty]
+        private Visibility adminTabsVisibility = Visibility.Hidden;
         [ObservableProperty]
         private string usersTileTitle;
 
