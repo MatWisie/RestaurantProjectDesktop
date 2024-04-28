@@ -233,6 +233,40 @@ namespace RestaurantDesktop.Service
             return reservations;
         }
 
+        public List<LoginLogModel> ExtractLoginLogsFromJson(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                throw new ArgumentNullException("JSON string cannot be null or empty");
+            }
+
+            JArray jsonArray = JArray.Parse(json);
+
+            if (jsonArray == null)
+            {
+                throw new Exception("Failed to parse JSON");
+            }
+
+            List<LoginLogModel> logs = new List<LoginLogModel>();
+
+            foreach (JObject logObj in jsonArray)
+            {
+                LoginLogModel log = new LoginLogModel
+                {
+                    Id = logObj["id"].Value<int>(),
+                    IpAddress = logObj["ipAddress"].ToString(),
+                    Success = logObj["success"].Value<bool>(),
+                    CreatedAt = logObj["createdAt"].Value<DateTime>(),
+                    StatusCode = logObj["statusCode"].ToString(),
+                    IdentityUserId = logObj["identityUserId"].ToString(),
+                };
+
+                logs.Add(log);
+            }
+
+            return logs;
+        }
+
         private List<DishWithIdModel> GetDishes(JArray dishes)
         {
             List<DishWithIdModel> dishesList = new List<DishWithIdModel>();

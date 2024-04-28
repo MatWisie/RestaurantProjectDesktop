@@ -11,5 +11,6 @@ namespace RestaurantDesktop.Interface
         List<TableWithIdModel> ExtractTablesFromJson(string json);
         List<OrderWithId> ExtractOrdersFromJson(string json);
         List<ReservationModel> ExtractReservationsFromJson(string json);
+        List<LoginLogModel> ExtractLoginLogsFromJson(string json);
     }
 }
