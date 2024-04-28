@@ -55,6 +55,7 @@ namespace RestaurantDesktop
             services.AddTransient<ReservationsViewModel>();
             services.AddTransient<EditReservationViewModel>();
             services.AddTransient<UserChangePasswordViewModel>();
+            services.AddTransient<SecurityLogsViewModel>();
 
             return services.BuildServiceProvider();
         }
