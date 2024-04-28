@@ -36,6 +36,11 @@ namespace RestaurantDesktop.Service
 
         public TableWithIdModel CopyTableModel(TableWithIdModel model)
         {
+            if (model == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             return new TableWithIdModel()
             {
                 Id = model.Id,

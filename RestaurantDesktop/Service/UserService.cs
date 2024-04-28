@@ -8,11 +8,9 @@ namespace RestaurantDesktop.Service
     public class UserService : IUserService
     {
         private readonly IUsersRepository _usersRepository;
-        private readonly IConfigurationService _configurationService;
-        public UserService(IUsersRepository usersRepository, IConfigurationService configurationService)
+        public UserService(IUsersRepository usersRepository)
         {
             _usersRepository = usersRepository;
-            _configurationService = configurationService;
         }
         public async Task<RestResponse> GetUsers(string userToken)
         {
@@ -34,6 +32,17 @@ namespace RestaurantDesktop.Service
         public async Task<RestResponse> DeleteUser(string userToken, string userIdToDelete)
         {
             return await _usersRepository.DeleteUser(userToken, userIdToDelete);
+        }
+
+        public RestResponse GetUser(string userToken, string userId)
+        {
+            return _usersRepository.GetUser(userToken, userId);
+        }
+
+        public RestResponse ChangeUserPassword(string userToken, UserChangePasswordModel userChangePasswordModel)
+        {
+            string json = JsonSerializer.Serialize(userChangePasswordModel);
+            return _usersRepository.ChangeUserPassword(userToken, json);
         }
     }
 }

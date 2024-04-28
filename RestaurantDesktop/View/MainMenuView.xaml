@@ -41,7 +41,7 @@
             <mah:Tile Title="{Binding UsersTileTitle}" Command="{Binding GoToUserSettingsCommand}" Grid.Column="1" Grid.Row="1" Width="300" Height="300">
                 <mahIcons:Modern Kind="User" Width="200" Height="200"/>
             </mah:Tile>
-            <mah:Tile Title="Logout" Grid.Column="2" Grid.Row="1" Width="300" Height="300" Background="DarkOrange">
+            <mah:Tile Title="Logout" Grid.Column="2" Grid.Row="1" Width="300" Height="300" Background="DarkOrange" Command="{Binding GoToLogoutCommand}">
                 <mahIcons:Modern Kind="DoorLeave"  Width="200" Height="200"/>
             </mah:Tile>
         </Grid>

@@ -55,6 +55,9 @@
         <DataTemplate DataType="{x:Type vm:EditReservationViewModel}">
             <view:EditReservationView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:UserChangePasswordViewModel}">
+            <view:UserChangePasswordView />
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

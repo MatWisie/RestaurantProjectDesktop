@@ -56,9 +56,8 @@ namespace RestaurantDesktop.ViewModel
             UserEditModel userEditModel = new UserEditModel()
             {
                 Id = _userIdToEdit,
-                UserName = UserName,
+                Username = UserName,
                 Password = Password,
-                Email = Email,
                 Age = Age,
             };
             var result = _userService.EditUser(token, userEditModel);
@@ -124,6 +123,8 @@ namespace RestaurantDesktop.ViewModel
             string role = _configurationService.GetConfiguration("UserRole");
             if (role == "Admin")
                 WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<UserAdminViewModel>()));
+            else
+                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<MainMenuViewModel>()));
         }
     }
 }

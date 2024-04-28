@@ -45,7 +45,15 @@ namespace RestaurantDesktop.ViewModel
                 _configurationService.AddConfiguration("UserId", userId);
                 _configurationService.AddConfiguration("UserRole", userRole);
 
-                WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<MainMenuViewModel>()));
+                string firstLogin = (string)_jsonService.ExtractFromJson(response.Content, "firstLogin");
+                if (firstLogin == "True")
+                {
+                    WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<UserChangePasswordViewModel>()));
+                }
+                else
+                {
+                    WeakReferenceMessenger.Default.Send(new ChangeMainViewMessage(App.Current.Services.GetService<MainMenuViewModel>()));
+                }
             }
         }
 
