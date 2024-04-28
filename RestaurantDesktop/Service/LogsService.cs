@@ -11,5 +11,9 @@ namespace RestaurantDesktop.Service
             _logsRepository = logsRepository;
         }
 
+        public async Task<RestResponse> GetLoginLogs(string userToken)
+        {
+            return await _logsRepository.GetLoginLogs(userToken);
+        }
     }
 }
