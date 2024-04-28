@@ -32,7 +32,7 @@ namespace RestaurantDesktop.ViewModel
             var response = _authService.LoginWorker(UserName, Password);
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                ErrorText = "Wrong name or password";
+                ErrorText = response.ErrorMessage != null ? response.ErrorMessage : response.Content;
                 return;
             }
 

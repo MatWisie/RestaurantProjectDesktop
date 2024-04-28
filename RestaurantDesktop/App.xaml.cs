@@ -38,6 +38,8 @@ namespace RestaurantDesktop
             services.AddScoped<IOrdersService, OrdersService>();
             services.AddScoped<IReservationsRepository, ReservationsRepository>();
             services.AddScoped<IReservationService, ReservationService>();
+            services.AddScoped<ILogsRepository, LogsRepository>();
+            services.AddScoped<ILogsService, LogsService>();
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<MainWindowViewModel>();
@@ -53,6 +55,7 @@ namespace RestaurantDesktop
             services.AddTransient<ReservationsViewModel>();
             services.AddTransient<EditReservationViewModel>();
             services.AddTransient<UserChangePasswordViewModel>();
+            services.AddTransient<SecurityLogsViewModel>();
 
             return services.BuildServiceProvider();
         }

@@ -8,24 +8,15 @@ namespace RestaurantDesktop.Service
     {
         public string ExtractFromJson(string json, string key)
         {
-            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(json))
-            {
-                throw new ArgumentNullException("Key or JSON string cannot be null or empty");
-            }
+            CheckJsonFormat(json, key);
 
             JObject jsonResponse = JObject.Parse(json);
 
-            if (jsonResponse == null)
-            {
-                throw new Exception("Failed to parse JSON");
-            }
+            CheckJsonNull(jsonResponse);
 
             JToken token = jsonResponse.SelectToken(key);
 
-            if (token == null)
-            {
-                throw new Exception("Key does not exist in response");
-            }
+            CheckJTokenNull(token);
 
             if (token.Type == JTokenType.Array)
             {
@@ -46,17 +37,11 @@ namespace RestaurantDesktop.Service
         }
         public List<User> ExtractUsersFromJson(string json)
         {
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                throw new ArgumentNullException("JSON string cannot be null or empty");
-            }
+            CheckJsonFormat(json);
 
             JArray jsonArray = JArray.Parse(json);
 
-            if (jsonArray == null)
-            {
-                throw new Exception("Failed to parse JSON");
-            }
+            CheckJsonNull(jsonArray);
 
             List<User> users = new List<User>();
 
@@ -76,17 +61,11 @@ namespace RestaurantDesktop.Service
         }
         public List<DishWithIdModel> ExtractDishesFromJson(string json)
         {
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                throw new ArgumentNullException("JSON string cannot be null or empty");
-            }
+            CheckJsonFormat(json);
 
             JArray jsonArray = JArray.Parse(json);
 
-            if (jsonArray == null)
-            {
-                throw new Exception("Failed to parse JSON");
-            }
+            CheckJsonNull(jsonArray);
 
             List<DishWithIdModel> dishes = new List<DishWithIdModel>();
 
@@ -110,17 +89,11 @@ namespace RestaurantDesktop.Service
 
         public TableGridModel ExtractTableGridDataFromJson(string json)
         {
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                throw new ArgumentNullException("JSON string cannot be null or empty");
-            }
+            CheckJsonFormat(json);
 
             JObject jsonGridData = JObject.Parse(json);
 
-            if (jsonGridData == null)
-            {
-                throw new Exception("Failed to parse JSON");
-            }
+            CheckJsonNull(jsonGridData);
 
             TableGridModel gridData = new TableGridModel()
             {
@@ -133,17 +106,11 @@ namespace RestaurantDesktop.Service
 
         public List<TableWithIdModel> ExtractTablesFromJson(string json)
         {
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                throw new ArgumentNullException("JSON string cannot be null or empty");
-            }
+            CheckJsonFormat(json);
 
             JArray jsonArray = JArray.Parse(json);
 
-            if (jsonArray == null)
-            {
-                throw new Exception("Failed to parse JSON");
-            }
+            CheckJsonNull(json);
 
             List<TableWithIdModel> tables = new List<TableWithIdModel>();
 
@@ -167,17 +134,11 @@ namespace RestaurantDesktop.Service
 
         public List<OrderWithId> ExtractOrdersFromJson(string json)
         {
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                throw new ArgumentNullException("JSON string cannot be null or empty");
-            }
+            CheckJsonFormat(json);
 
             JArray jsonArray = JArray.Parse(json);
 
-            if (jsonArray == null)
-            {
-                throw new Exception("Failed to parse JSON");
-            }
+            CheckJsonNull(jsonArray);
 
             List<OrderWithId> orders = new List<OrderWithId>();
 
@@ -202,17 +163,11 @@ namespace RestaurantDesktop.Service
 
         public List<ReservationModel> ExtractReservationsFromJson(string json)
         {
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                throw new ArgumentNullException("JSON string cannot be null or empty");
-            }
+            CheckJsonFormat(json);
 
             JArray jsonArray = JArray.Parse(json);
 
-            if (jsonArray == null)
-            {
-                throw new Exception("Failed to parse JSON");
-            }
+            CheckJsonNull(json);
 
             List<ReservationModel> reservations = new List<ReservationModel>();
 
@@ -233,6 +188,34 @@ namespace RestaurantDesktop.Service
             return reservations;
         }
 
+        public List<LoginLogModel> ExtractLoginLogsFromJson(string json)
+        {
+            CheckJsonFormat(json);
+
+            JArray jsonArray = JArray.Parse(json);
+
+            CheckJsonNull(jsonArray);
+
+            List<LoginLogModel> logs = new List<LoginLogModel>();
+
+            foreach (JObject logObj in jsonArray)
+            {
+                LoginLogModel log = new LoginLogModel
+                {
+                    Id = logObj["id"].Value<int>(),
+                    IpAddress = logObj["ipAddress"].ToString(),
+                    Success = logObj["success"].Value<bool>(),
+                    CreatedAt = logObj["createdAt"].Value<DateTime>(),
+                    StatusCode = logObj["statusCode"].ToString(),
+                    IdentityUserId = logObj["identityUserId"].ToString(),
+                };
+
+                logs.Add(log);
+            }
+
+            return logs;
+        }
+
         private List<DishWithIdModel> GetDishes(JArray dishes)
         {
             List<DishWithIdModel> dishesList = new List<DishWithIdModel>();
@@ -251,6 +234,44 @@ namespace RestaurantDesktop.Service
                 dishesList.Add(dish);
             }
             return dishesList;
+        }
+
+        private bool CheckJsonFormat(string json, string key)
+        {
+            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(json))
+            {
+                throw new ArgumentNullException("Key or JSON string cannot be null or empty");
+            }
+
+            return true;
+        }
+
+        private bool CheckJsonFormat(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                throw new ArgumentNullException("Key or JSON string cannot be null or empty");
+            }
+
+            return true;
+        }
+
+        private bool CheckJsonNull(object jsonResponse)
+        {
+            if (jsonResponse == null)
+            {
+                throw new Exception("Failed to parse JSON");
+            }
+            return true;
+        }
+
+        private bool CheckJTokenNull(JToken token)
+        {
+            if (token == null)
+            {
+                throw new Exception("Key does not exist in response");
+            }
+            return true;
         }
 
     }

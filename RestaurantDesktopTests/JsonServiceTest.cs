@@ -67,7 +67,7 @@ namespace RestaurantDesktopTests
 
         [TestMethod]
         [ExpectedException(typeof(JsonReaderException))]
-        public void ExtractOrdersFromJson_InCorrectJson_CorrectDishesInOrder()
+        public void ExtractOrdersFromJson_InCorrectJson_JsonReaderException()
         {
             JsonService service = new JsonService();
             string json = "bla";
@@ -100,6 +100,46 @@ namespace RestaurantDesktopTests
             Assert.AreEqual(expectedResult[0].To, result[0].To);
             Assert.AreEqual(expectedResult[0].UserId, result[0].UserId);
             Assert.AreEqual(expectedResult[0].TableId, result[0].TableId);
+        }
+
+        [TestMethod]
+        public void ExtractLoginLogsFromJson_CorrectOneObjJson_CorrectLogValues()
+        {
+            JsonService service = new JsonService();
+            string json = "[\r\n    {\r\n        \"id\": 1,\r\n        \"ipAddress\": \"91.225.159.196\",\r\n        \"success\": true,\r\n        \"createdAt\": \"2024-04-28T18:50:18.8853813\",\r\n        \"statusCode\": 200,\r\n        \"identityUserId\": \"774f7b87-d9ff-4efb-8c4c-1f1112efdf3c\",\r\n        \"identityUserModel\": null\r\n    }\r\n]";
+
+            List<LoginLogModel> expectedResult = new List<LoginLogModel>()
+            {
+                new LoginLogModel()
+                {
+                    Id = 1,
+                    IpAddress = "91.225.159.196",
+                    Success = true,
+                    CreatedAt = new DateTime(2024, 4, 28, 18, 50, 18),
+                    StatusCode = "200",
+                    IdentityUserId = "774f7b87-d9ff-4efb-8c4c-1f1112efdf3c"
+                }
+            };
+
+            var result = service.ExtractLoginLogsFromJson(json);
+            var dateWithoutMiliSeconds = new DateTime(result[0].CreatedAt.Year, result[0].CreatedAt.Month, result[0].CreatedAt.Day, result[0].CreatedAt.Hour, result[0].CreatedAt.Minute, result[0].CreatedAt.Second);
+
+            Assert.AreEqual(expectedResult[0].Id, result[0].Id);
+            Assert.AreEqual(expectedResult[0].IpAddress, result[0].IpAddress);
+            Assert.AreEqual(expectedResult[0].Success, result[0].Success);
+            Assert.AreEqual(expectedResult[0].CreatedAt, dateWithoutMiliSeconds);
+            Assert.AreEqual(expectedResult[0].StatusCode, result[0].StatusCode);
+            Assert.AreEqual(expectedResult[0].IdentityUserId, result[0].IdentityUserId);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(JsonReaderException))]
+        public void ExtractLoginLogsFromJson_InCorrectJson_JsonReaderException()
+        {
+            JsonService service = new JsonService();
+            string json = "bla";
+            var result = service.ExtractOrdersFromJson(json);
+
         }
     }
 }
