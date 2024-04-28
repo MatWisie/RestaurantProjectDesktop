@@ -58,6 +58,9 @@
         <DataTemplate DataType="{x:Type vm:UserChangePasswordViewModel}">
             <view:UserChangePasswordView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SecurityLogsViewModel}">
+            <view:SecurityLogsView />
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
