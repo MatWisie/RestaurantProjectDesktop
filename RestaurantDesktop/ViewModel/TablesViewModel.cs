@@ -88,6 +88,7 @@ namespace RestaurantDesktop.ViewModel
         private void SubscribeToDragDropEvents()
         {
             TableGrid.PreviewMouseDown += TableGrid_PreviewMouseMove;
+            tables.Clear();
             foreach (var item in TableGrid.Children)
             {
                 if (item is Rectangle rectangle)
@@ -113,6 +114,15 @@ namespace RestaurantDesktop.ViewModel
             foreach (var table in modifiedTables.ToList())
             {
                 var result = await _tableService.EditTable(_configurationService.GetConfiguration("UserToken"), table, table.Id);
+                foreach (var mTable in modifiedTables)
+                {
+                    var tableInOrg = tables.Where(e => e.Id == mTable.Id).FirstOrDefault();
+                    if (tableInOrg != null)
+                    {
+                        tables.Remove(tableInOrg);
+                        tables.Add(_tableService.CopyTableModel(mTable));
+                    }
+                }
                 modifiedTables.Remove(table);
             }
             OnPropertyChanged(nameof(ModifiedTablesMessage));
