@@ -165,5 +165,14 @@ namespace RestaurantDesktopTests
             Assert.AreEqual(expectedResult[0].Role, result[0].Role);
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(JsonReaderException))]
+        public void ExtractUsersFromJson_InCorrectJson_JsonReaderException()
+        {
+            JsonService service = new JsonService();
+            string json = "bla";
+            var result = service.ExtractUsersFromJson(json);
+
+        }
     }
 }
