@@ -141,5 +141,38 @@ namespace RestaurantDesktopTests
             var result = service.ExtractOrdersFromJson(json);
 
         }
+
+        [TestMethod]
+        public void ExtractUsersFromJson_CorrectOneObjJson_CorrectUser()
+        {
+            JsonService service = new JsonService();
+            string json = "[\r\n  {\r\n    \"id\": \"2\",\r\n    \"userName\": \"TestUser\",\r\n    \"role\": \"Admin\",\r\n }\r\n]";
+
+            List<User> expectedResult = new List<User>()
+            {
+                new User()
+                {
+                    Id = "2",
+                    UserName = "TestUser",
+                    Role = "Admin",
+                }
+            };
+
+            var result = service.ExtractUsersFromJson(json);
+
+            Assert.AreEqual(expectedResult[0].Id, result[0].Id);
+            Assert.AreEqual(expectedResult[0].UserName, result[0].UserName);
+            Assert.AreEqual(expectedResult[0].Role, result[0].Role);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(JsonReaderException))]
+        public void ExtractUsersFromJson_InCorrectJson_JsonReaderException()
+        {
+            JsonService service = new JsonService();
+            string json = "bla";
+            var result = service.ExtractUsersFromJson(json);
+
+        }
     }
 }
